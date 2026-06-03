@@ -1,0 +1,1 @@
+for now run gui.py to run the game since the rest has not been configured yet.
