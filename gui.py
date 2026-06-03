@@ -114,19 +114,19 @@ def submit_move():
     if piece == "wp":
         legal_move = pawn_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
-    elif piece == "wr":
+    elif piece == "wr" or piece == "br":
         legal_move = rook_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
-    elif piece == "wb":
+    elif piece == "wb" or piece == "bb":
         legal_move = bishop_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
-    elif piece == "wq":
+    elif piece == "wq" or piece == "bq":
         legal_move = queen_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
-    elif piece == "wk":
+    elif piece == "wk" or piece == "bk":
         legal_move = king_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
-    elif piece == "wn":
+    elif piece == "wn" or piece == "bn":
         legal_move = knight_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
     if legal_move == True:

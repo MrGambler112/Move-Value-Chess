@@ -38,6 +38,29 @@ def pawn_move(start_row, start_col, end_row, end_col, STARTING_POSITION):
 
     return False
 
+def black_pawn_move(start_row, start_col, end_row, end_col, STARTING_POSITION):
+
+    if same_colour_piece(start_row, start_col, end_row, end_col, STARTING_POSITION) == True:
+        return False
+
+    if STARTING_POSITION[start_row][start_col] == "bp":
+
+        if start_col == end_col:
+            if end_row == start_row + 1:
+                if STARTING_POSITION[end_row][end_col] == "":
+                    return True
+
+            if start_row == 1 and end_row == 3:
+                if STARTING_POSITION[2][start_col] == "":
+                    if STARTING_POSITION[end_row][end_col] == "":
+                        return True
+
+        if end_row == start_row + 1:
+            if end_col == start_col - 1 or end_col == start_col + 1:
+                if STARTING_POSITION[end_row][end_col] != "":
+                    return True
+
+    return False
 
 def rook_move(start_row, start_col, end_row, end_col, STARTING_POSITION):
 
