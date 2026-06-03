@@ -1,4 +1,3 @@
-
 from data import STARTING_POSITION, PIECE_TEXT
 from move_rules import pawn_move, rook_move, bishop_move, queen_move, king_move, knight_move
 import tkinter

@@ -13,7 +13,6 @@ def same_colour_piece(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
     return False
 
-
 def pawn_move(start_row, start_col, end_row, end_col, STARTING_POSITION):
 
     if same_colour_piece(start_row, start_col, end_row, end_col, STARTING_POSITION) == True:
