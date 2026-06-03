@@ -1,6 +1,6 @@
 
 from data import STARTING_POSITION, PIECE_TEXT
-from move_rules import pawn_move
+from move_rules import pawn_move, rook_move
 import tkinter
 
 
@@ -106,6 +106,16 @@ def submit_move():
         end_col,
         STARTING_POSITION
     )
+
+    piece = STARTING_POSITION[start_row][start_col]
+
+    legal_move = False
+
+    if piece == "wp":
+        legal_move = pawn_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
+
+    elif piece == "wr":
+        legal_move = rook_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
     if legal_move == True:
         STARTING_POSITION[end_row][end_col] = STARTING_POSITION[start_row][start_col]
