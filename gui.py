@@ -1,6 +1,6 @@
 
 from data import STARTING_POSITION, PIECE_TEXT
-from move_rules import pawn_move, rook_move
+from move_rules import pawn_move, rook_move, bishop_move, queen_move, king_move, knight_move
 import tkinter
 
 
@@ -116,6 +116,18 @@ def submit_move():
 
     elif piece == "wr":
         legal_move = rook_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
+
+    elif piece == "wb":
+        legal_move = bishop_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
+
+    elif piece == "wq":
+        legal_move = queen_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
+
+    elif piece == "wk":
+        legal_move = king_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
+
+    elif piece == "wn":
+        legal_move = knight_move(start_row, start_col, end_row, end_col, STARTING_POSITION)
 
     if legal_move == True:
         STARTING_POSITION[end_row][end_col] = STARTING_POSITION[start_row][start_col]
