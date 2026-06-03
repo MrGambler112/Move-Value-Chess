@@ -4,9 +4,12 @@ What was done so far:
     all legal positions for both black and whites
 
 What needs to be implemented:
+
     Timer for the game, maybe something like 5 minutes
     Point system:
         Allot each piece its point value.
+        Display each players captured points.
+        Create a choice for user to choose a specific number of points for the AI target before game over.
     
     hardcode some chess opening, contingent that users moves do not reduce the move value
 
