@@ -1,6 +1,7 @@
 from data import STARTING_POSITION, PIECE_TEXT
 from move_rules import pawn_move, rook_move, bishop_move, queen_move, king_move, knight_move
 import tkinter
+import time
 
 
 #window config
@@ -59,6 +60,7 @@ def draw_pieces():
                 canvas.create_text(x_center, y_center, text=PIECE_TEXT[piece], font=("Arial", 32), fill="black")
 
 def submit_move():
+    global current_turn, last_time
     user_move = move_entry.get()
 
     if user_move[0] == "A":
@@ -132,9 +134,69 @@ def submit_move():
         STARTING_POSITION[end_row][end_col] = STARTING_POSITION[start_row][start_col]
         STARTING_POSITION[start_row][start_col] = ""
 
+        # Switch turn
+        if current_turn == "white":
+            current_turn = "black"
+            turn_label.config(text="Black's turn", fg="black")
+        else:
+            current_turn = "white"
+            turn_label.config(text="White's turn", fg="blue")
+        last_time = time.time()
+
     draw_everything()
 
 canvas.pack()
+
+# Timer setup — 10-minute countdown for each player
+TIME_LIMIT = 600  # 10 minutes in seconds
+white_time = TIME_LIMIT
+black_time = TIME_LIMIT
+current_turn = "white"  # white moves first
+timer_running = True
+
+white_timer_label = tkinter.Label(window, text="White: 10:00", font=("Arial", 14), fg="black")
+white_timer_label.place(x=60, y=10)
+black_timer_label = tkinter.Label(window, text="Black: 10:00", font=("Arial", 14), fg="black")
+black_timer_label.place(x=500, y=10)
+turn_label = tkinter.Label(window, text="White's turn", font=("Arial", 12), fg="blue")
+turn_label.place(x=290, y=35)
+
+last_time = time.time()
+
+def update_timers():
+    global white_time, black_time, current_turn, last_time, timer_running
+    if not timer_running:
+        window.after(1000, update_timers)
+        return
+
+    now = time.time()
+    delta = int(now - last_time)
+    last_time = now
+
+    if current_turn == "white":
+        white_time -= delta
+        if white_time <= 0:
+            white_time = 0
+            timer_running = False
+            turn_label.config(text="Black wins! (White ran out of time)", fg="red")
+    else:
+        black_time -= delta
+        if black_time <= 0:
+            black_time = 0
+            timer_running = False
+            turn_label.config(text="White wins! (Black ran out of time)", fg="red")
+
+    w_min = white_time // 60
+    w_sec = white_time % 60
+    b_min = black_time // 60
+    b_sec = black_time % 60
+
+    white_timer_label.config(text=f"White: {w_min:02d}:{w_sec:02d}")
+    black_timer_label.config(text=f"Black: {b_min:02d}:{b_sec:02d}")
+
+    window.after(1000, update_timers)
+
+update_timers()
 
 move_entry = tkinter.Entry(window, width=10)
 move_entry.place(x=290, y=650)

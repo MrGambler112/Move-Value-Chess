@@ -21,3 +21,4 @@ What needs to be implemented:
         small randome tie-break values
         bias values
         move values
+        time
