@@ -126,6 +126,21 @@ def set_ai_target_score(score) :
     ai_target_score = score
 
 
+def get_ai_target_score() :
+
+    return ai_target_score
+
+
+def get_player_color() :
+
+    return player_color
+
+
+def get_ai_color() :
+
+    return ai_color
+
+
 def check_ai_target_reached() :
 
     #if the AI has enough capture points, the AI wins immediately

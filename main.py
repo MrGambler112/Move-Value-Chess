@@ -6,13 +6,13 @@
 
 from data import STARTING_POSITION, PIECE_TEXT
 from move_rules import is_legal_move
-import game_state
 from game_state import record_capture, record_move, reset_game_state, set_player_color
 from game_state import set_ai_target_score, check_ai_target_reached, check_player_target_reached
 from game_state import get_player_capture_string, get_ai_capture_string
 from game_state import get_player_score, get_ai_score
 from game_state import set_game_result, save_match_to_file, get_lifetime_stats_string
 from game_state import should_do_random_promotion, set_random_promotion_done
+from game_state import get_ai_target_score, get_player_color, get_ai_color
 from board_logic import is_checkmate, is_stalemate, would_be_in_check
 from ai_engine import get_ai_move_info
 import time
@@ -178,12 +178,16 @@ def convert_input_to_coords(user_move) :
     if end_col < 0 or end_col > 7 :
         return [-1, -1, -1, -1]
 
-    #rank 8 is board row 0, so flip the number
-    try :
-        start_row = 8 - int(user_move[1])
-        end_row = 8 - int(user_move[3])
-    except :
+    #the rank characters must be numbers before converting them
+    if user_move[1].isdigit() == False :
         return [-1, -1, -1, -1]
+
+    if user_move[3].isdigit() == False :
+        return [-1, -1, -1, -1]
+
+    #rank 8 is board row 0, so flip the number
+    start_row = 8 - int(user_move[1])
+    end_row = 8 - int(user_move[3])
 
     if start_row < 0 or start_row > 7 :
         return [-1, -1, -1, -1]
@@ -349,7 +353,7 @@ def get_score_text() :
         + " pts  |  AI: "
         + str(get_ai_score ())
         + " pts  |  Target: "
-        + str(game_state.ai_target_score)
+        + str(get_ai_target_score ())
     )
 
 
@@ -366,7 +370,7 @@ def refresh_display() :
         score_label.configure (text = "")
 
     #turn label changes depending on who is moving
-    if current_turn == game_state.player_color :
+    if current_turn == get_player_color () :
         turn_label.configure (text = "Your turn", fg = "blue")
     elif game_started == True :
         turn_label.configure (text = "AI thinking...", fg = "red")
@@ -511,7 +515,7 @@ def finish_game(result, reason, status_text, turn_text) :
 def check_current_side_game_over(side_to_check) :
 
     if is_checkmate(STARTING_POSITION, side_to_check) == True :
-        if side_to_check == game_state.player_color :
+        if side_to_check == get_player_color () :
             finish_game ("lose", "Checkmate! The AI checkmated your King.", "Game Over - Checkmate", "Checkmate! AI wins!")
         else :
             finish_game ("win", "Checkmate! You checkmated the AI King.", "Game Over - Checkmate", "Checkmate! You win!")
@@ -533,12 +537,12 @@ def check_game_over() :
 
     #the player can also win if they reach the target score first
     if check_player_target_reached() == True :
-        finish_game ("win", "You reached the target score of " + str(game_state.ai_target_score) + " points!", "Game Over - Player reached target", "You reached the target!")
+        finish_game ("win", "You reached the target score of " + str(get_ai_target_score ()) + " points!", "Game Over - Player reached target", "You reached the target!")
         return True
 
     #the AI also wins if it reaches the target score
     if check_ai_target_reached() == True :
-        finish_game ("lose", "AI reached the target score of " + str(game_state.ai_target_score) + " points!", "Game Over - AI reached target", "AI wins! Target score reached!")
+        finish_game ("lose", "AI reached the target score of " + str(get_ai_target_score ()) + " points!", "Game Over - AI reached target", "AI wins! Target score reached!")
         return True
 
     return False
@@ -623,7 +627,7 @@ def do_ai_turn() :
     do_random_ai_promotion()
 
     #get the AI move from the AI engine
-    ai_result = get_ai_move_info (STARTING_POSITION, game_state.ai_color)
+    ai_result = get_ai_move_info (STARTING_POSITION, get_ai_color ())
     ai_move = ai_result[0]
 
     if ai_move == [] :
@@ -631,9 +635,9 @@ def do_ai_turn() :
         return
 
     #play the AI move on the real board
-    make_real_move (ai_move[0], ai_move[1], ai_move[2], ai_move[3], game_state.ai_color)
+    make_real_move (ai_move[0], ai_move[1], ai_move[2], ai_move[3], get_ai_color ())
 
-    current_turn = game_state.player_color
+    current_turn = get_player_color ()
     last_time = time.time ()
 
     refresh_display ()
@@ -670,7 +674,7 @@ def start_game() :
     game_started = True
     game_over_screen_showing = False
     timer_running = True
-    current_turn = game_state.player_color
+    current_turn = get_player_color ()
     white_time = TIME_LIMIT
     ai_time = TIME_LIMIT
     last_time = time.time ()
@@ -679,7 +683,7 @@ def start_game() :
     exit_button.place (x = -500, y = -500)
     show_game_widgets ()
     status_label.configure (text = "Your move")
-    info_label.configure (text = "Target: AI needs " + str(game_state.ai_target_score) + " points to win")
+    info_label.configure (text = "Target: AI needs " + str(get_ai_target_score ()) + " points to win")
 
     refresh_display ()
 
@@ -697,7 +701,7 @@ def submit_move() :
         status_label.configure (text = "Game is over!")
         return
 
-    if current_turn != game_state.player_color :
+    if current_turn != get_player_color () :
         status_label.configure (text = "Not your turn!")
         return
 
@@ -723,7 +727,7 @@ def submit_move() :
         return
 
     #player must move only their own colour
-    if piece[0] != game_state.player_color[0] :
+    if piece[0] != get_player_color ()[0] :
         status_label.configure (text = "That is not your piece!")
         return
 
@@ -733,14 +737,14 @@ def submit_move() :
         return
 
     #the move also cannot leave the player's king in check
-    if would_be_in_check(STARTING_POSITION, start_row, start_col, end_row, end_col, game_state.player_color) == True :
+    if would_be_in_check(STARTING_POSITION, start_row, start_col, end_row, end_col, get_player_color ()) == True :
         status_label.configure (text = "Move leaves king in check!")
         return
 
     #play the move, then switch to the AI turn
-    make_real_move (start_row, start_col, end_row, end_col, game_state.player_color)
+    make_real_move (start_row, start_col, end_row, end_col, get_player_color ())
 
-    current_turn = game_state.ai_color
+    current_turn = get_ai_color ()
     last_time = time.time ()
 
     refresh_display ()
@@ -769,7 +773,7 @@ def update_timers() :
             last_time = now
 
             #only the side whose turn it is loses time
-            if current_turn == game_state.player_color :
+            if current_turn == get_player_color () :
                 white_time = white_time - passed_seconds
 
                 if white_time <= 0 :
@@ -777,7 +781,7 @@ def update_timers() :
                     refresh_display ()
                     handle_timeout ()
 
-            elif current_turn == game_state.ai_color :
+            elif current_turn == get_ai_color () :
                 ai_time = ai_time - passed_seconds
 
                 if ai_time <= 0 :
