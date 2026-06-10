@@ -35,7 +35,7 @@ canvas = tkinter.Canvas (window, width = 700, height = 700, bg = "white")
 #board constants
 SQUARE_SIZE = 60
 BOARD_OFFSET_X = 110
-BOARD_OFFSET_Y = 100
+BOARD_OFFSET_Y = 110
 TIME_LIMIT = 600
 
 
@@ -239,7 +239,7 @@ def draw_board() :
     #column letters are shown on the top and bottom of the board
     for col in range(8) :
         x_center = BOARD_OFFSET_X + (col * SQUARE_SIZE) + (SQUARE_SIZE / 2)
-        canvas.create_text (x_center, BOARD_OFFSET_Y - 20, text = col_to_letter(col), fill = "black")
+        canvas.create_text (x_center, BOARD_OFFSET_Y - 15, text = col_to_letter(col), fill = "black")
         canvas.create_text (x_center, BOARD_OFFSET_Y + 500, text = col_to_letter(col), fill = "black")
 
 
@@ -419,15 +419,15 @@ def show_game_widgets() :
 
     #use separate rows for score, turn, and history so they do not touch the board labels
     score_label.place (x = 180, y = 10, width = 340)
-    turn_label.place (x = 290, y = 38, width = 120)
-    info_label.place (x = 225, y = 62, width = 250)
+    turn_label.place (x = 290, y = 36, width = 120)
+    info_label.place (x = 210, y = 58, width = 280)
 
     #keep the captures on the left and the move controls centered below the board
-    player_captured_label.place (x = 25, y = 620, width = 140)
-    ai_captured_label.place (x = 25, y = 642, width = 140)
-    status_label.place (x = 235, y = 620, width = 230)
-    move_entry.place (x = 270, y = 652, width = 80)
-    move_button.place (x = 360, y = 648, width = 45)
+    player_captured_label.place (x = 25, y = 625, width = 140)
+    ai_captured_label.place (x = 25, y = 647, width = 140)
+    status_label.place (x = 235, y = 625, width = 230)
+    move_entry.place (x = 270, y = 655, width = 80)
+    move_button.place (x = 360, y = 651, width = 45)
 
 
 def hide_all_widgets() :
@@ -767,7 +767,7 @@ game_widgets.append (ai_timer_label)
 turn_label = tkinter.Label (window, text = "Welcome!", font = ("Arial", 12), fg = "blue", bg = "white")
 game_widgets.append (turn_label)
 
-info_label = tkinter.Label (window, text = "", font = ("Arial", 10), fg = "green", bg = "white")
+info_label = tkinter.Label (window, text = "", font = ("Arial", 9), fg = "green", bg = "white")
 game_widgets.append (info_label)
 
 score_label = tkinter.Label (window, text = "Player: 0 pts  |  AI: 0 pts  |  Target: 10", font = ("Arial", 11), fg = "purple", bg = "white")
