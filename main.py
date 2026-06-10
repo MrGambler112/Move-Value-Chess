@@ -27,7 +27,7 @@ window.title ("Move Value Chess")
 window.resizable (False, False)
 window.configure (bg = "#302E2B")
 
-canvas = tkinter.Canvas (window, width = 900, height = 700, bg = "#302E2B", highlightthickness = 0)
+canvas = tkinter.Canvas (window, width = 900, height = 700, bg = "#302E2B")
 canvas.place (x = 0, y = 0)
 
 
@@ -66,9 +66,7 @@ start_button = ""
 move_button = ""
 new_game_button = ""
 exit_button = ""
-white_color_button = ""
-black_color_button = ""
-random_color_button = ""
+player_color_label = ""
 setup_widgets = []
 game_widgets = []
 
@@ -81,7 +79,6 @@ ai_time = TIME_LIMIT
 current_turn = "white"
 last_time = time.time ()
 game_over_screen_showing = False
-selected_color = "white"
 
 
 #column letter conversion
@@ -352,47 +349,6 @@ def draw_everything() :
     draw_pieces ()
 
 
-#color selection functions
-def select_white_color() :
-
-    global selected_color
-    selected_color = "white"
-    highlight_color_button (white_color_button)
-    unhighlight_color_button (black_color_button)
-    unhighlight_color_button (random_color_button)
-    status_label.configure (text = "Selected: White. Click Start Game.")
-
-
-def select_black_color() :
-
-    global selected_color
-    selected_color = "black"
-    highlight_color_button (black_color_button)
-    unhighlight_color_button (white_color_button)
-    unhighlight_color_button (random_color_button)
-    status_label.configure (text = "Selected: Black. Click Start Game.")
-
-
-def select_random_color() :
-
-    global selected_color
-    selected_color = random.choice(["white", "black"])
-    highlight_color_button (random_color_button)
-    unhighlight_color_button (white_color_button)
-    unhighlight_color_button (black_color_button)
-    status_label.configure (text = "Random: " + selected_color.capitalize() + ". Click Start Game.")
-
-
-def highlight_color_button(button) :
-
-    button.configure (bg = BUTTON_BG, fg = BUTTON_TEXT)
-
-
-def unhighlight_color_button(button) :
-
-    button.configure (bg = "#525250", fg = MUTED_TEXT)
-
-
 #start a new game from the side panel
 def new_game() :
 
@@ -407,11 +363,8 @@ def new_game() :
 
     hide_game_widgets ()
     show_setup_widgets ()
-    unhighlight_color_button (white_color_button)
-    unhighlight_color_button (black_color_button)
-    unhighlight_color_button (random_color_button)
 
-    status_label.configure (text = "Choose a colour and start.")
+    status_label.configure (text = "Set target score and click Start Game.")
     refresh_display ()
 
 
@@ -423,8 +376,7 @@ def get_score_text() :
         + str(get_player_score ())
         + " pts  |  AI: "
         + str(get_ai_score ())
-        + " pts  |  Target: "
-        + str(get_ai_target_score ())
+        + " pts"
     )
 
 
@@ -498,13 +450,10 @@ def show_setup_widgets() :
         widget.place (x = -500, y = -500)
 
     title_label.place (x = 645, y = 25)
-    choose_color_label.place (x = 645, y = 95)
-    white_color_button.place (x = 645, y = 125, width = 68)
-    black_color_button.place (x = 718, y = 125, width = 68)
-    random_color_button.place (x = 791, y = 125, width = 55)
-    target_label.place (x = 645, y = 180)
-    score_entry.place (x = 675, y = 205, width = 90)
-    start_button.place (x = 660, y = 250, width = 120)
+    player_color_label.place (x = 645, y = 100)
+    target_label.place (x = 645, y = 165)
+    score_entry.place (x = 675, y = 190, width = 90)
+    start_button.place (x = 660, y = 240, width = 120)
 
 
 def hide_game_widgets() :
@@ -580,7 +529,7 @@ def show_game_over(result, reason, player_score, ai_score_value) :
     canvas.create_rectangle (35, 55, 615, 645, fill = "#1A1A1A", outline = "")
     canvas.create_text (325, 180, text = "Game Over", font = ("Arial", 28, "bold"), fill = TEXT_COLOR)
     canvas.create_text (325, 260, text = title, font = ("Arial", 34, "bold"), fill = title_color)
-    canvas.create_text (325, 340, text = reason, font = ("Arial", 14), fill = MUTED_TEXT, width = 400)
+    canvas.create_text (325, 340, text = reason, font = ("Arial", 14), fill = MUTED_TEXT)
     canvas.create_text (325, 410, text = score_text, font = ("Arial", 18, "bold"), fill = TEXT_COLOR)
     canvas.create_text (325, 460, text = "Lifetime: " + get_lifetime_stats_string (), font = ("Arial", 14), fill = MUTED_TEXT)
 
@@ -759,7 +708,7 @@ def start_game() :
     set_ai_target_score (target_score)
     reset_game_state ()
     reset_board_to_start ()
-    set_player_color (selected_color)
+    set_player_color ("white")
 
     #reset timers and turn order
     game_started = True
@@ -774,7 +723,6 @@ def start_game() :
     exit_button.place (x = -500, y = -500)
     show_game_widgets ()
     status_label.configure (text = "Your move")
-    info_label.configure (text = "Target: AI needs " + str(get_ai_target_score ()) + " points to win")
 
     refresh_display ()
 
@@ -887,10 +835,10 @@ def update_timers() :
 #timer labels above and below the board
 board_center_x = BOARD_OFFSET_X + (8 * SQUARE_SIZE // 2)
 
-black_timer_label = tkinter.Label (window, text = "Black  10:00", font = ("Arial", 18, "bold"), fg = MUTED_TEXT, bg = PANEL_BG, padx = 15, pady = 8)
+black_timer_label = tkinter.Label (window, text = "Black  10:00", font = ("Arial", 18, "bold"), fg = MUTED_TEXT, bg = PANEL_BG)
 black_timer_label.place (x = board_center_x - 80, y = 12, width = 160)
 
-white_timer_label = tkinter.Label (window, text = "White  10:00", font = ("Arial", 18, "bold"), fg = MUTED_TEXT, bg = PANEL_BG, padx = 15, pady = 8)
+white_timer_label = tkinter.Label (window, text = "White  10:00", font = ("Arial", 18, "bold"), fg = MUTED_TEXT, bg = PANEL_BG)
 white_timer_label.place (x = board_center_x - 80, y = 655, width = 160)
 
 
@@ -899,29 +847,20 @@ TITLE_FONT = ("Arial", 20, "bold")
 LABEL_FONT = ("Arial", 11)
 BUTTON_FONT = ("Arial", 11, "bold")
 
-title_label = tkinter.Label (window, text = "Move Value\nChess", font = ("Arial", 22, "bold"), fg = TEXT_COLOR, bg = PANEL_BG, justify = "center")
+title_label = tkinter.Label (window, text = "Move Value\nChess", font = ("Arial", 22, "bold"), fg = TEXT_COLOR, bg = PANEL_BG)
 setup_widgets.append (title_label)
 
-choose_color_label = tkinter.Label (window, text = "Choose Colour", font = ("Arial", 12), fg = MUTED_TEXT, bg = PANEL_BG)
-setup_widgets.append (choose_color_label)
-
-white_color_button = tkinter.Button (window, text = "White", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, cursor = "hand2", command = select_white_color)
-setup_widgets.append (white_color_button)
-
-black_color_button = tkinter.Button (window, text = "Black", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, cursor = "hand2", command = select_black_color)
-setup_widgets.append (black_color_button)
-
-random_color_button = tkinter.Button (window, text = "Rand", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, cursor = "hand2", command = select_random_color)
-setup_widgets.append (random_color_button)
+player_color_label = tkinter.Label (window, text = "You are playing as White", font = ("Arial", 12), fg = TEXT_COLOR, bg = PANEL_BG)
+setup_widgets.append (player_color_label)
 
 target_label = tkinter.Label (window, text = "AI Target Score", font = ("Arial", 10), fg = MUTED_TEXT, bg = PANEL_BG)
 setup_widgets.append (target_label)
 
-score_entry = tkinter.Entry (window, width = 8, font = ("Arial", 12), justify = "center", bg = "#3A3A3A", fg = TEXT_COLOR, relief = "flat")
+score_entry = tkinter.Entry (window, width = 8, font = ("Arial", 12))
 score_entry.insert (0, "10")
 setup_widgets.append (score_entry)
 
-start_button = tkinter.Button (window, text = "Start Game", font = ("Arial", 12, "bold"), bg = BUTTON_BG, fg = BUTTON_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, padx = 12, pady = 8, cursor = "hand2")
+start_button = tkinter.Button (window, text = "Start Game", font = ("Arial", 12, "bold"), bg = BUTTON_BG, fg = BUTTON_TEXT)
 setup_widgets.append (start_button)
 
 
@@ -941,19 +880,19 @@ game_widgets.append (ai_captured_label)
 info_label = tkinter.Label (window, text = "", font = ("Arial", 9), fg = MUTED_TEXT, bg = PANEL_BG)
 game_widgets.append (info_label)
 
-status_label = tkinter.Label (window, text = "Choose a colour and start.", font = ("Arial", 11), fg = MUTED_TEXT, bg = PANEL_BG, wraplength = 210)
+status_label = tkinter.Label (window, text = "Set target score and click Start Game.", font = ("Arial", 11), fg = MUTED_TEXT, bg = PANEL_BG)
 game_widgets.append (status_label)
 
-move_entry = tkinter.Entry (window, width = 10, font = ("Arial", 11), bg = "#3A3A3A", fg = TEXT_COLOR, relief = "flat")
+move_entry = tkinter.Entry (window, width = 10, font = ("Arial", 11))
 game_widgets.append (move_entry)
 
-move_button = tkinter.Button (window, text = "Move", font = BUTTON_FONT, bg = BUTTON_BG, fg = BUTTON_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, padx = 8, pady = 4, cursor = "hand2")
+move_button = tkinter.Button (window, text = "Move", font = BUTTON_FONT, bg = BUTTON_BG, fg = BUTTON_TEXT)
 game_widgets.append (move_button)
 
-new_game_button = tkinter.Button (window, text = "New Game", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = "#666666", activeforeground = TEXT_COLOR, padx = 10, pady = 6, cursor = "hand2", command = new_game)
+new_game_button = tkinter.Button (window, text = "New Game", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, command = new_game)
 game_widgets.append (new_game_button)
 
-exit_button = tkinter.Button (window, text = "Exit", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = "#666666", activeforeground = TEXT_COLOR, padx = 10, pady = 6, cursor = "hand2", command = close_window_button)
+exit_button = tkinter.Button (window, text = "Exit", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, command = close_window_button)
 exit_button.place (x = -500, y = -500)
 
 

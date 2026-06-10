@@ -1,0 +1,277 @@
+MOVE VALUE BASED 
+CHESS ENGINE 
+
+ICS3U CULMINATING 
+DRAFT 
+DOCUMENTATION 
+
+Mahadi Masuduzzaman 
+Ryan Rawal 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Requirements: 
+Dictionary of specific terminology 
+
+Term 
+
+Chess Board 
+
+Chess Piece 
+
+Player 
+
+AI Opponent 
+
+Legal Move 
+
+Check 
+
+Checkmate 
+
+Stalemate 
+
+Point Value 
+
+Point-Based AI 
+
+Game Over 
+
+Timer 
+
+Definition 
+
+An 8 x 8 grid where the game will be played. 
+The board will be displayed in a Tkinter 
+window that is 700x700 pixels. 
+
+Game pieces like a pawn, rook, knight, 
+bishop, and etc. 
+
+User playing the game. Opposing the AI 
+Opponent. 
+
+The algorithmic computer controlled 
+opponent that will be the opposing user. 
+
+A move that follows the rules of chess. 
+
+When the King is under the threat of being 
+captured. 
+
+When the King has no legal move to escape 
+and is under the threat of being captured. 
+
+When a player has no more legal moves, but 
+their king is not currently in check, resulting 
+in a draw. 
+
+Point value assigned to each piece. For 
+example, both the knight and bishop are worth 
+3 points. Where the queen is worth 9 points. 
+
+The AI opponent chooses moves by 
+maximizing move value instead of using the 
+generalized min-max algorithm. 
+
+The condition where the game ends because 
+of either a checkmate or a point-based win 
+from the AI opponent. Another instance of the 
+game ending could be running out of time. 
+
+A count down from a specific time that will 
+indicate when the game ends (winner will be 
+based on who has the highest amount of 
+points). 
+
+Position Value 
+
+The score given to a move based on how 
+
+ 
+Development Value 
+
+Safety Value 
+
+Small Random Tie-Break Value 
+
+Move Value 
+
+Random Promotion 
+
+Bias Value 
+
+useful the destination square is.  
+
+The score given to a move that helps move 
+pieces from their starting positions into more 
+useful positions. For example, moving the 
+knight to the centre to gain more control. 
+
+The score given to a move based on how safe 
+the moved piece is after the move. A move 
+has a lower safety value if it places an 
+important piece where it can be captured. 
+
+A small random score added to a move when 
+multiple legal moves account to similar 
+values. This is to prevent the AI from making 
+the same moves each time. Value must be 
+really small so that it does not deter it from its 
+algorithmic behaviour. 
+
+The total score assigned to a possible AI 
+move. It is calculated by combining the point 
+value, position value, development value, 
+safety value, and a small random tie-break 
+value. The AI will use the move value to 
+determine the best legal move. 
+
+The twist: at a random point in the game, one 
+AI pawn will be promoted to a stronger piece. 
+Contingent on move value analysis, the 
+promotion can alter inner variables like 
+position value, safety value, and development 
+value, making the promoted piece more 
+impactful. 
+
+A value that is derived from the predicted 
+player’s move value after the chosen AI 
+move. This value can only be subtracted from 
+the total move value as a way to prevent risky 
+moves. 
+
+User Standpoint Description 
+
+For the user playing against the AI opponent, the software must provide the following: 
+
+Game Setup 
+
+●  The game launches and displays a chess board. 
+
+ 
+ 
+ 
+ 
+●  All chess pieces will be in their starting positions. 
+●  The player will be allotted the bottom half of the board. 
+●  The AI will control the opposite side of the board. 
+●  Either side of the board will be based on a randomized possibility of black or white. 
+●  A timer will be displayed and will begin counting down after the first move. 
+●  Both the player and AI will have their own timers. 
+●  The user can see all the chess board, chess pieces and their placement, current score, and 
+
+the time remaining. 
+
+Gameplay 
+
+●  The user can select a chess piece and attempt to move it. 
+●  The engine will verify whether it is legal or not 
+
+○  If the move is illegal the move will not be allowed and the canvas will not update 
+
+and will remain in its initial position. 
+
+○  If the move is legal then the canvas will update to the player's move. 
+
+●  After the player makes a legal move the AI opponent will take its turn. 
+●  The AI opponent chooses a move by scoring possible legal moves using point values, 
+
+position value, development value, and safety value. 
+
+●  At the beginning of the game, the AI will follow a randomly selected opening pattern. 
+●  If the current opening pattern cannot be used because of the player’s moves, the AI will 
+
+switch to its general point-based move system. 
+
+●  The AI will generate all possible legal moves for its own pieces. 
+●  Each possible move will receive a move value based on the point value, position value, 
+
+development value, safety value, and a small random tie-break value. 
+
+●  The AI will determine the player’s possible moves after each possible AI move and use 
+the same move value system to attach values. Based on each possibility, the AI will 
+subtract a bias value from risky moves to lower the move value to prevent playing risky 
+moves. 
+
+●  The move with the highest move value will be played by the AI. 
+●  After the AI’s move, the canvas will update and it will once again be the player's turn. 
+●  If a piece is captured, the captured piece will be removed from the board. 
+
+○  The point value assigned to the piece will be allotted to either the player or AI 
+
+depending on who captured the piece. 
+
+●  The game will continue until checkmate, stalemate, the timer running out, or the AI 
+
+reaching the required point total. 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Detailed Requirement: 
+
+The following is a flowchart of how the point-based move system works: 
+
+Test Case: 
+
+Test Case 01 
+
+Description 
+
+AI Risky Move Test  The AI has multiple possible legal moves. One move gives a higher capture, but 
+
+allows the player to capture an important AI piece next turn. The AI calculates the 
+player’s response and subtracts the bias value and compares all move values. The 
+AI should choose the move with the highest final move value. 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+

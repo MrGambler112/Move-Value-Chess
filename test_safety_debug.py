@@ -1,5 +1,5 @@
 #Name: Safety Debug Test
-#Programmer: Syed (Mahadi) Masuduzzaman
+#Programmer: Syed (Mahadi) Masuduzzaman and Ryan Rawal
 #Date: June 10, 2026
 #Description: This file prints board layouts and a few debug checks
 #             to help inspect AI safety value situations.
