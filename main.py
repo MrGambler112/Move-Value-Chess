@@ -1,5 +1,5 @@
 #Name: Move Value Based Chess Engine
-#Programmer: Syed (Mahadi) Masuduzzaman
+#Programmer: Syed (Mahadi) Masuduzzaman and Ryan Rawal
 #Date: June 10, 2026
 #Description: This program lets the user play chess against an AI
 #             that chooses the move with the best move value.
@@ -22,26 +22,38 @@ import random
 
 #window setup
 window = tkinter.Tk ()
-window.geometry ("700x700")
-window.title ("Move Value Based Chess Engine")
-window.attributes ("-topmost", True)
-window.update_idletasks ()
-window.attributes ("-topmost", False)
-window.focus_force ()
+window.geometry ("900x700")
+window.title ("Move Value Chess")
+window.resizable (False, False)
+window.configure (bg = "#302E2B")
 
-canvas = tkinter.Canvas (window, width = 700, height = 700, bg = "white")
+canvas = tkinter.Canvas (window, width = 900, height = 700, bg = "#302E2B", highlightthickness = 0)
+canvas.place (x = 0, y = 0)
 
 
 #board constants
-SQUARE_SIZE = 60
-BOARD_OFFSET_X = 110
-BOARD_OFFSET_Y = 110
+SQUARE_SIZE = 70
+BOARD_OFFSET_X = 45
+BOARD_OFFSET_Y = 65
 TIME_LIMIT = 600
+
+
+#color constants
+BACKGROUND = "#302E2B"
+PANEL_BG = "#262421"
+BOARD_LIGHT = "#EEEED2"
+BOARD_DARK = "#769656"
+SELECTED_SQUARE_COLOR = "#F6F669"
+TEXT_COLOR = "#FFFFFF"
+MUTED_TEXT = "#CFCFCF"
+BUTTON_BG = "#81B64C"
+BUTTON_HOVER = "#95C85A"
+BUTTON_TEXT = "#FFFFFF"
 
 
 #widget variables
 white_timer_label = ""
-ai_timer_label = ""
+black_timer_label = ""
 turn_label = ""
 info_label = ""
 score_label = ""
@@ -52,7 +64,11 @@ score_entry = ""
 move_entry = ""
 start_button = ""
 move_button = ""
+new_game_button = ""
 exit_button = ""
+white_color_button = ""
+black_color_button = ""
+random_color_button = ""
 setup_widgets = []
 game_widgets = []
 
@@ -65,6 +81,7 @@ ai_time = TIME_LIMIT
 current_turn = "white"
 last_time = time.time ()
 game_over_screen_showing = False
+selected_color = "white"
 
 
 #column letter conversion
@@ -228,23 +245,23 @@ def draw_board() :
             y2 = y1 + SQUARE_SIZE
 
             if (row + col) % 2 == 0 :
-                square_colour = "grey"
+                square_colour = BOARD_DARK
             else :
-                square_colour = "white"
+                square_colour = BOARD_LIGHT
 
-            canvas.create_rectangle (x1, y1, x2, y2, fill = square_colour, outline = "black")
+            canvas.create_rectangle (x1, y1, x2, y2, fill = square_colour, outline = BOARD_DARK)
 
     #row numbers are shown on the left and right side of the board
     for row in range(8) :
         y_center = BOARD_OFFSET_Y + (row * SQUARE_SIZE) + (SQUARE_SIZE / 2)
-        canvas.create_text (BOARD_OFFSET_X - 20, y_center, text = str(8 - row), fill = "black")
-        canvas.create_text (BOARD_OFFSET_X + 500, y_center, text = str(8 - row), fill = "black")
+        canvas.create_text (BOARD_OFFSET_X - 20, y_center, text = str(8 - row), fill = MUTED_TEXT, font = ("Arial", 10))
+        canvas.create_text (BOARD_OFFSET_X + 570, y_center, text = str(8 - row), fill = MUTED_TEXT, font = ("Arial", 10))
 
     #column letters are shown on the top and bottom of the board
     for col in range(8) :
         x_center = BOARD_OFFSET_X + (col * SQUARE_SIZE) + (SQUARE_SIZE / 2)
-        canvas.create_text (x_center, BOARD_OFFSET_Y - 15, text = col_to_letter(col), fill = "black")
-        canvas.create_text (x_center, BOARD_OFFSET_Y + 500, text = col_to_letter(col), fill = "black")
+        canvas.create_text (x_center, BOARD_OFFSET_Y - 15, text = col_to_letter(col), fill = MUTED_TEXT, font = ("Arial", 10))
+        canvas.create_text (x_center, BOARD_OFFSET_Y + 575, text = col_to_letter(col), fill = MUTED_TEXT, font = ("Arial", 10))
 
 
 #draw all the pieces from the current board position
@@ -257,23 +274,14 @@ def draw_pieces() :
             if piece != "" :
                 x_center = BOARD_OFFSET_X + (col * SQUARE_SIZE) + (SQUARE_SIZE / 2)
                 y_center = BOARD_OFFSET_Y + (row * SQUARE_SIZE) + (SQUARE_SIZE / 2)
-                canvas.create_text (x_center, y_center, text = PIECE_TEXT[piece], font = ("Arial", 32), fill = "black")
+                canvas.create_text (x_center, y_center, text = PIECE_TEXT[piece], font = ("Arial", 34), fill = "black")
 
 
 #draw the starting screen panel on top of the board area
 def draw_start_screen() :
 
-    #cover the full canvas so the setup screen looks separate from the game board
-    canvas.create_rectangle (0, 0, 700, 700, fill = "lightyellow", outline = "lightyellow")
-
-    #top banner for the title area
-    canvas.create_rectangle (70, 55, 630, 155, fill = "white", outline = "black", width = 2)
-
-    #main setup panel in the center
-    canvas.create_rectangle (145, 180, 555, 535, fill = "cornsilk", outline = "black", width = 2)
-
-    #bottom helper panel
-    canvas.create_rectangle (170, 555, 530, 625, fill = "white", outline = "black", width = 2)
+    #no overlay needed - side panel handles the setup
+    return
 
 
 #random promotion helpers
@@ -336,12 +344,75 @@ def draw_everything() :
         return
 
     canvas.delete ("all")
+
+    #draw the dark side panel background on the right
+    canvas.create_rectangle (630, 0, 900, 700, fill = PANEL_BG, outline = "")
+
     draw_board ()
     draw_pieces ()
 
-    #while the game has not started yet, keep the setup panel visible
-    if game_started == False :
-        draw_start_screen ()
+
+#color selection functions
+def select_white_color() :
+
+    global selected_color
+    selected_color = "white"
+    highlight_color_button (white_color_button)
+    unhighlight_color_button (black_color_button)
+    unhighlight_color_button (random_color_button)
+    status_label.configure (text = "Selected: White. Click Start Game.")
+
+
+def select_black_color() :
+
+    global selected_color
+    selected_color = "black"
+    highlight_color_button (black_color_button)
+    unhighlight_color_button (white_color_button)
+    unhighlight_color_button (random_color_button)
+    status_label.configure (text = "Selected: Black. Click Start Game.")
+
+
+def select_random_color() :
+
+    global selected_color
+    selected_color = random.choice(["white", "black"])
+    highlight_color_button (random_color_button)
+    unhighlight_color_button (white_color_button)
+    unhighlight_color_button (black_color_button)
+    status_label.configure (text = "Random: " + selected_color.capitalize() + ". Click Start Game.")
+
+
+def highlight_color_button(button) :
+
+    button.configure (bg = BUTTON_BG, fg = BUTTON_TEXT)
+
+
+def unhighlight_color_button(button) :
+
+    button.configure (bg = "#525250", fg = MUTED_TEXT)
+
+
+#start a new game from the side panel
+def new_game() :
+
+    global game_started, game_over_screen_showing, white_time, ai_time
+
+    game_started = False
+    game_over_screen_showing = False
+    white_time = TIME_LIMIT
+    ai_time = TIME_LIMIT
+    reset_board_to_start ()
+    reset_game_state ()
+
+    hide_game_widgets ()
+    show_setup_widgets ()
+    unhighlight_color_button (white_color_button)
+    unhighlight_color_button (black_color_button)
+    unhighlight_color_button (random_color_button)
+
+    status_label.configure (text = "Choose a colour and start.")
+    refresh_display ()
 
 
 #build the score label text from the current scores
@@ -364,22 +435,41 @@ def refresh_display() :
     if game_over_screen_showing == True :
         return
 
+    #timer labels always show time
+    if game_started == True :
+        white_timer_label.configure (text = "White  " + format_time (white_time))
+        black_timer_label.configure (text = "Black  " + format_time (ai_time))
+    else :
+        white_timer_label.configure (text = "White  10:00")
+        black_timer_label.configure (text = "Black  10:00")
+
+    #highlight the active timer
+    if game_started == True and timer_running == True :
+        if current_turn == "white" :
+            white_timer_label.configure (fg = TEXT_COLOR)
+            black_timer_label.configure (fg = MUTED_TEXT)
+        else :
+            white_timer_label.configure (fg = MUTED_TEXT)
+            black_timer_label.configure (fg = TEXT_COLOR)
+
+    #side panel labels update based on game state
     if game_started == True :
         score_label.configure (text = get_score_text ())
     else :
         score_label.configure (text = "")
 
     #turn label changes depending on who is moving
-    if current_turn == get_player_color () :
-        turn_label.configure (text = "Your turn", fg = "blue")
-    elif game_started == True :
-        turn_label.configure (text = "AI thinking...", fg = "red")
+    if game_started == True :
+        if current_turn == get_player_color () :
+            turn_label.configure (text = "Your Turn", fg = BUTTON_BG)
+        else :
+            turn_label.configure (text = "AI Thinking...", fg = "#FF6B6B")
     else :
-        turn_label.configure (text = "")
+        turn_label.configure (text = "Not Started")
 
     #history label shows the saved lifetime record
     if game_started == True :
-        info_label.configure (text = "History: " + get_lifetime_stats_string ())
+        info_label.configure (text = "Lifetime: " + get_lifetime_stats_string ())
     else :
         info_label.configure (text = "")
 
@@ -391,14 +481,6 @@ def refresh_display() :
         player_captured_label.configure (text = "")
         ai_captured_label.configure (text = "")
 
-    #timer labels are updated every refresh
-    if game_started == True :
-        white_timer_label.configure (text = "You: " + format_time (white_time))
-        ai_timer_label.configure (text = "AI: " + format_time (ai_time))
-    else :
-        white_timer_label.configure (text = "")
-        ai_timer_label.configure (text = "")
-
     draw_everything ()
 
 
@@ -409,6 +491,22 @@ def hide_setup_widgets() :
         widget.place (x = -500, y = -500)
 
 
+def show_setup_widgets() :
+
+    #place all setup widgets in the side panel area
+    for widget in setup_widgets :
+        widget.place (x = -500, y = -500)
+
+    title_label.place (x = 645, y = 25)
+    choose_color_label.place (x = 645, y = 95)
+    white_color_button.place (x = 645, y = 125, width = 68)
+    black_color_button.place (x = 718, y = 125, width = 68)
+    random_color_button.place (x = 791, y = 125, width = 55)
+    target_label.place (x = 645, y = 180)
+    score_entry.place (x = 675, y = 205, width = 90)
+    start_button.place (x = 660, y = 250, width = 120)
+
+
 def hide_game_widgets() :
 
     for widget in game_widgets :
@@ -417,21 +515,21 @@ def hide_game_widgets() :
 
 def show_game_widgets() :
 
-    #put both timers at the far ends so the player and AI times are easy to compare
-    white_timer_label.place (x = 15, y = 10, width = 110)
-    ai_timer_label.place (x = 575, y = 10, width = 110)
+    #timers above and below the board
+    board_center_x = BOARD_OFFSET_X + (8 * SQUARE_SIZE // 2)
+    white_timer_label.place (x = board_center_x - 80, y = 655, width = 160)
+    black_timer_label.place (x = board_center_x - 80, y = 12, width = 160)
 
-    #use separate rows for score, turn, and history so they do not touch the board labels
-    score_label.place (x = 180, y = 10, width = 340)
-    turn_label.place (x = 290, y = 36, width = 120)
-    info_label.place (x = 210, y = 58, width = 280)
-
-    #keep the captures on the left and the move controls centered below the board
-    player_captured_label.place (x = 25, y = 625, width = 140)
-    ai_captured_label.place (x = 25, y = 647, width = 140)
-    status_label.place (x = 235, y = 625, width = 230)
-    move_entry.place (x = 270, y = 655, width = 80)
-    move_button.place (x = 360, y = 651, width = 45)
+    #side panel widgets during the game
+    turn_label.place (x = 645, y = 95, width = 160)
+    score_label.place (x = 645, y = 130, width = 200)
+    player_captured_label.place (x = 645, y = 170, width = 200)
+    ai_captured_label.place (x = 645, y = 195, width = 200)
+    info_label.place (x = 645, y = 230, width = 200)
+    status_label.place (x = 645, y = 300, width = 210)
+    move_entry.place (x = 645, y = 380, width = 100)
+    move_button.place (x = 755, y = 380, width = 50)
+    new_game_button.place (x = 665, y = 450, width = 110)
 
 
 def hide_all_widgets() :
@@ -464,37 +562,30 @@ def show_game_over(result, reason, player_score, ai_score_value) :
     save_match_to_file (white_time, ai_time)
     hide_all_widgets ()
 
-    #cover the full window with a clean ending screen
-    canvas.delete ("all")
-    canvas.create_rectangle (0, 0, 700, 700, fill = "lightyellow", outline = "lightyellow")
-    canvas.create_rectangle (70, 55, 630, 155, fill = "white", outline = "black", width = 2)
-    canvas.create_rectangle (120, 185, 580, 545, fill = "cornsilk", outline = "black", width = 2)
-    canvas.create_rectangle (170, 585, 530, 645, fill = "white", outline = "black", width = 2)
-
+    #keep the board visible with final position
+    #show game over info in the side panel area
     if result == "win" :
         title = "You Win!"
-        title_colour = "lightgreen"
+        title_color = BUTTON_BG
     elif result == "lose" :
         title = "You Lose!"
-        title_colour = "red"
+        title_color = "#FF6B6B"
     else :
         title = "Draw!"
-        title_colour = "yellow"
+        title_color = "#FFD700"
 
-    score_text = "Player: " + str(player_score) + " pts   AI: " + str(ai_score_value) + " pts"
-    result_text = "Game Over"
+    score_text = "Player: " + str(player_score) + " pts  AI: " + str(ai_score_value) + " pts"
 
-    #the top banner shows the main ending title
-    canvas.create_text (350, 105, text = result_text, font = ("Arial", 28, "bold"), fill = "black")
+    #draw dark overlay on the board area only
+    canvas.create_rectangle (35, 55, 615, 645, fill = "#1A1A1A", outline = "")
+    canvas.create_text (325, 180, text = "Game Over", font = ("Arial", 28, "bold"), fill = TEXT_COLOR)
+    canvas.create_text (325, 260, text = title, font = ("Arial", 34, "bold"), fill = title_color)
+    canvas.create_text (325, 340, text = reason, font = ("Arial", 14), fill = MUTED_TEXT, width = 400)
+    canvas.create_text (325, 410, text = score_text, font = ("Arial", 18, "bold"), fill = TEXT_COLOR)
+    canvas.create_text (325, 460, text = "Lifetime: " + get_lifetime_stats_string (), font = ("Arial", 14), fill = MUTED_TEXT)
 
-    #the center panel shows the winner, reason, and score summary
-    canvas.create_text (350, 245, text = title, font = ("Arial", 34, "bold"), fill = title_colour)
-    canvas.create_text (350, 315, text = reason, font = ("Arial", 16), fill = "black", width = 360)
-    canvas.create_text (350, 390, text = score_text, font = ("Arial", 18, "bold"), fill = "black")
-    canvas.create_text (350, 445, text = "Lifetime: " + get_lifetime_stats_string (), font = ("Arial", 16), fill = "black")
-
-    #show a normal button so the window does not close right away
-    exit_button.place (x = 310, y = 595)
+    exit_button.configure (bg = BUTTON_BG, fg = BUTTON_TEXT)
+    exit_button.place (x = 265, y = 550, width = 120)
 
 
 #end the game, stop the timers, and show the ending screen
@@ -668,7 +759,7 @@ def start_game() :
     set_ai_target_score (target_score)
     reset_game_state ()
     reset_board_to_start ()
-    set_player_color ("white")
+    set_player_color (selected_color)
 
     #reset timers and turn order
     game_started = True
@@ -793,80 +884,87 @@ def update_timers() :
     window.after (1000, update_timers)
 
 
-#top status labels
-white_timer_label = tkinter.Label (window, text = "You: 10:00", font = ("Arial", 14), fg = "black", bg = "white")
-game_widgets.append (white_timer_label)
+#timer labels above and below the board
+board_center_x = BOARD_OFFSET_X + (8 * SQUARE_SIZE // 2)
 
-ai_timer_label = tkinter.Label (window, text = "AI: 10:00", font = ("Arial", 14), fg = "black", bg = "white")
-game_widgets.append (ai_timer_label)
+black_timer_label = tkinter.Label (window, text = "Black  10:00", font = ("Arial", 18, "bold"), fg = MUTED_TEXT, bg = PANEL_BG, padx = 15, pady = 8)
+black_timer_label.place (x = board_center_x - 80, y = 12, width = 160)
 
-turn_label = tkinter.Label (window, text = "Welcome!", font = ("Arial", 12), fg = "blue", bg = "white")
-game_widgets.append (turn_label)
-
-info_label = tkinter.Label (window, text = "", font = ("Arial", 9), fg = "green", bg = "white")
-game_widgets.append (info_label)
-
-score_label = tkinter.Label (window, text = "Player: 0 pts  |  AI: 0 pts  |  Target: 10", font = ("Arial", 11), fg = "purple", bg = "white")
-game_widgets.append (score_label)
-
-player_captured_label = tkinter.Label (window, text = "Your captures: None", font = ("Arial", 9), fg = "blue", bg = "white")
-game_widgets.append (player_captured_label)
-
-ai_captured_label = tkinter.Label (window, text = "AI captures: None", font = ("Arial", 9), fg = "red", bg = "white")
-game_widgets.append (ai_captured_label)
-
-status_label = tkinter.Label (window, text = "Set target score and click Start", font = ("Arial", 10), fg = "green", bg = "white")
-game_widgets.append (status_label)
+white_timer_label = tkinter.Label (window, text = "White  10:00", font = ("Arial", 18, "bold"), fg = MUTED_TEXT, bg = PANEL_BG, padx = 15, pady = 8)
+white_timer_label.place (x = board_center_x - 80, y = 655, width = 160)
 
 
-#setup screen labels and controls
-title_label = tkinter.Label (window, text = "Move Value Chess", font = ("Arial", 20, "bold"), bg = "lightyellow")
-title_label.place (x = 230, y = 85)
+#side panel labels and controls
+TITLE_FONT = ("Arial", 20, "bold")
+LABEL_FONT = ("Arial", 11)
+BUTTON_FONT = ("Arial", 11, "bold")
+
+title_label = tkinter.Label (window, text = "Move Value\nChess", font = ("Arial", 22, "bold"), fg = TEXT_COLOR, bg = PANEL_BG, justify = "center")
 setup_widgets.append (title_label)
 
-set_score_label = tkinter.Label (window, text = "Set AI Target Score", font = ("Arial", 14), bg = "lightyellow")
-set_score_label.place (x = 250, y = 235)
-setup_widgets.append (set_score_label)
+choose_color_label = tkinter.Label (window, text = "Choose Colour", font = ("Arial", 12), fg = MUTED_TEXT, bg = PANEL_BG)
+setup_widgets.append (choose_color_label)
 
-instructions_label = tkinter.Label (window, text = "Enter how many points the AI needs to win.\nDefault is 10 points.", font = ("Arial", 10), bg = "lightyellow")
-instructions_label.place (x = 215, y = 285)
-setup_widgets.append (instructions_label)
+white_color_button = tkinter.Button (window, text = "White", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, cursor = "hand2", command = select_white_color)
+setup_widgets.append (white_color_button)
 
-score_entry = tkinter.Entry (window, width = 10, font = ("Arial", 16))
+black_color_button = tkinter.Button (window, text = "Black", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, cursor = "hand2", command = select_black_color)
+setup_widgets.append (black_color_button)
+
+random_color_button = tkinter.Button (window, text = "Rand", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, cursor = "hand2", command = select_random_color)
+setup_widgets.append (random_color_button)
+
+target_label = tkinter.Label (window, text = "AI Target Score", font = ("Arial", 10), fg = MUTED_TEXT, bg = PANEL_BG)
+setup_widgets.append (target_label)
+
+score_entry = tkinter.Entry (window, width = 8, font = ("Arial", 12), justify = "center", bg = "#3A3A3A", fg = TEXT_COLOR, relief = "flat")
 score_entry.insert (0, "10")
-score_entry.place (x = 303, y = 360)
 setup_widgets.append (score_entry)
 
-start_button = tkinter.Button (window, text = "Start Game", font = ("Arial", 14), bg = "lightgreen")
-start_button.place (x = 270, y = 425)
+start_button = tkinter.Button (window, text = "Start Game", font = ("Arial", 12, "bold"), bg = BUTTON_BG, fg = BUTTON_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, padx = 12, pady = 8, cursor = "hand2")
 setup_widgets.append (start_button)
 
-moves_label = tkinter.Label (window, text = "Enter moves like E2E4\nWhite moves first and AI plays black.", font = ("Arial", 10), bg = "lightyellow")
-moves_label.place (x = 225, y = 575)
-setup_widgets.append (moves_label)
 
+#game widgets (visible during the game)
+turn_label = tkinter.Label (window, text = "Not Started", font = ("Arial", 13, "bold"), fg = TEXT_COLOR, bg = PANEL_BG)
+game_widgets.append (turn_label)
 
-#move entry controls under the board
-canvas.place (x = 0, y = 0)
+score_label = tkinter.Label (window, text = "", font = ("Arial", 10), fg = MUTED_TEXT, bg = PANEL_BG)
+game_widgets.append (score_label)
 
-move_entry = tkinter.Entry (window, width = 10)
+player_captured_label = tkinter.Label (window, text = "", font = ("Arial", 9), fg = MUTED_TEXT, bg = PANEL_BG)
+game_widgets.append (player_captured_label)
+
+ai_captured_label = tkinter.Label (window, text = "", font = ("Arial", 9), fg = MUTED_TEXT, bg = PANEL_BG)
+game_widgets.append (ai_captured_label)
+
+info_label = tkinter.Label (window, text = "", font = ("Arial", 9), fg = MUTED_TEXT, bg = PANEL_BG)
+game_widgets.append (info_label)
+
+status_label = tkinter.Label (window, text = "Choose a colour and start.", font = ("Arial", 11), fg = MUTED_TEXT, bg = PANEL_BG, wraplength = 210)
+game_widgets.append (status_label)
+
+move_entry = tkinter.Entry (window, width = 10, font = ("Arial", 11), bg = "#3A3A3A", fg = TEXT_COLOR, relief = "flat")
 game_widgets.append (move_entry)
 
-move_button = tkinter.Button (window, text = "Move")
+move_button = tkinter.Button (window, text = "Move", font = BUTTON_FONT, bg = BUTTON_BG, fg = BUTTON_TEXT, relief = "flat", activebackground = BUTTON_HOVER, activeforeground = BUTTON_TEXT, padx = 8, pady = 4, cursor = "hand2")
 game_widgets.append (move_button)
 
-exit_button = tkinter.Button (window, text = "Exit", width = 8)
+new_game_button = tkinter.Button (window, text = "New Game", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = "#666666", activeforeground = TEXT_COLOR, padx = 10, pady = 6, cursor = "hand2", command = new_game)
+game_widgets.append (new_game_button)
+
+exit_button = tkinter.Button (window, text = "Exit", font = BUTTON_FONT, bg = "#525250", fg = MUTED_TEXT, relief = "flat", activebackground = "#666666", activeforeground = TEXT_COLOR, padx = 10, pady = 6, cursor = "hand2", command = close_window_button)
 exit_button.place (x = -500, y = -500)
 
 
 #connect buttons to their functions
 start_button.configure (command = start_game)
 move_button.configure (command = submit_move)
-exit_button.configure (command = close_window_button)
 
 
-#draw the starting screen and begin the timer loop
+#show the side panel and begin the timer loop
 hide_game_widgets ()
+show_setup_widgets ()
 refresh_display ()
 window.after (1000, update_timers)
 window.mainloop ()
