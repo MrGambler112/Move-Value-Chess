@@ -1,0 +1,151 @@
+================================================================================
+                    PYTHON FILE I/O
+================================================================================
+
+================================================================================
+OPENING FILES
+================================================================================
+
+file = open("filename.txt", "mode")
+file = open("path/to/file.txt", "mode")
+
+FILE MODES
+"r"         Read (file must exist)
+"w"         Write (overwrites or creates)
+"a"         Append (adds to end or creates)
+"r+"        Read and write
+"w+"        Write and read (overwrites)
+"a+"        Append and read
+"rb"        Read binary
+"wb"        Write binary
+"ab"        Append binary
+
+WITH STATEMENT (Recommended)
+with open("file.txt", "r") as file:
+    content = file.read()
+
+with open("file.txt", "w") as file:
+    file.write("text")
+
+# File automatically closed when done
+
+================================================================================
+READING
+================================================================================
+
+file.read()             Read entire file as string
+file.read(n)            Read n characters
+file.readline()         Read one line (includes \n)
+file.readlines()        Read all lines as list
+
+EXAMPLE - Read entire file
+with open("data.txt", "r") as file:
+    content = file.read()
+
+EXAMPLE - Read line by line
+with open("data.txt", "r") as file:
+    for line in file:
+        print(line.strip())
+
+EXAMPLE - Read all lines
+with open("data.txt", "r") as file:
+    lines = file.readlines()
+    for line in lines:
+        print(line.strip())
+
+================================================================================
+WRITING
+================================================================================
+
+file.write("text")          Write string to file
+file.writelines(list)       Write list of strings
+
+EXAMPLE - Write single line
+with open("output.txt", "w") as file:
+    file.write("Hello World\n")
+
+EXAMPLE - Write multiple lines
+lines = ["Line 1\n", "Line 2\n", "Line 3\n"]
+with open("output.txt", "w") as file:
+    file.writelines(lines)
+
+EXAMPLE - Append to file
+with open("log.txt", "a") as file:
+    file.write("New log entry\n")
+
+================================================================================
+POSITION
+================================================================================
+
+file.tell()             Get current position
+file.seek(0)            Move to beginning
+file.seek(n)            Move to position n
+file.seek(n, 0)         Move to position n from start
+file.seek(n, 1)         Move n from current
+file.seek(n, 2)         Move n from end
+
+================================================================================
+FILE CHECKING
+================================================================================
+
+import os
+os.path.exists("file.txt")     Check if file exists
+os.path.isfile("file.txt")     Check if file (not dir)
+os.path.isdir("folder")        Check if directory
+os.path.getsize("file.txt")    Get file size in bytes
+
+================================================================================
+COMMON PATTERNS
+================================================================================
+
+SAVE GAME DATA
+def save_game(data):
+    with open("save.txt", "w") as file:
+        for row in data:
+            for cell in row:
+                file.write(str(cell) + ",")
+            file.write("\n")
+
+LOAD GAME DATA
+def load_game():
+    data = []
+    with open("save.txt", "r") as file:
+        for line in file:
+            row = line.strip().split(",")
+            data.append(row[:-1])  # Remove empty last
+    return data
+
+SAVE SCORE
+def save_score(score):
+    with open("highscore.txt", "w") as file:
+        file.write(str(score))
+
+LOAD SCORE
+def load_score():
+    try:
+        with open("highscore.txt", "r") as file:
+            return int(file.read().strip())
+    except:
+        return 0
+
+LOG MOVES
+def log_move(move):
+    with open("game_log.txt", "a") as file:
+        file.write(move + "\n")
+
+READ CSV
+def read_csv(filename):
+    rows = []
+    with open(filename, "r") as file:
+        for line in file:
+            row = line.strip().split(",")
+            rows.append(row)
+    return rows
+
+WRITE CSV
+def write_csv(filename, rows):
+    with open(filename, "w") as file:
+        for row in rows:
+            file.write(",".join(str(x) for x in row) + "\n")
+
+================================================================================

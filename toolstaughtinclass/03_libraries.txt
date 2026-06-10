@@ -1,0 +1,283 @@
+================================================================================
+                    LIBRARIES TAUGHT IN CLASS
+================================================================================
+
+================================================================================
+1. MATH LIBRARY
+================================================================================
+
+import math
+
+CONSTANTS
+math.pi                  3.141592653589793
+math.e                   2.718281828459045
+math.inf                 Infinity
+math.nan                 Not a Number
+
+FUNCTIONS
+math.sqrt(x)             Square root
+math.pow(x, y)           x to the power y
+math.exp(x)              e to the power x
+math.log(x)              Natural logarithm
+math.log(x, base)        Logarithm with base
+math.log2(x)             Log base 2
+math.log10(x)            Log base 10
+math.ceil(x)             Round up to integer
+math.floor(x)            Round down to integer
+math.factorial(x)        Factorial (x!)
+math.gcd(a, b)           Greatest common divisor
+math.fabs(x)             Absolute value (returns float)
+math.fsum(iterable)      Sum with floating point precision
+math.comb(n, k)          Number of combinations
+math.perm(n, k)          Number of permutations
+math.isclose(a, b)       Check if values are close
+math.isinf(x)            Check if infinite
+math.isnan(x)            Check if NaN
+
+TRIGONOMETRY
+math.sin(x)              Sine (radians)
+math.cos(x)              Cosine (radians)
+math.tan(x)              Tangent (radians)
+math.asin(x)             Arc sine
+math.acos(x)             Arc cosine
+math.atan(x)             Arc tangent
+math.atan2(y, x)         Arc tangent of y/x
+math.degrees(x)          Radians to degrees
+math.radians(x)          Degrees to radians
+math.hypot(x, y)         Hypotenuse
+
+================================================================================
+2. RANDOM LIBRARY
+================================================================================
+
+import random
+
+FUNCTIONS
+random.random()                   Random float 0.0 to 1.0
+random.uniform(a, b)             Random float between a and b
+random.randint(a, b)             Random integer between a and b (inclusive)
+random.randrange(stop)           Random int 0 to stop-1
+random.randrange(start, stop)    Random int start to stop-1
+random.randrange(start, stop, step)  Random int with step
+
+random.choice(sequence)          Random element from list/string
+random.choices(sequence, k=n)    Random k elements (with replacement)
+random.sample(sequence, k=n)     Random k elements (without replacement)
+
+random.shuffle(list)             Shuffle list in place
+random.seed(n)                   Set random seed
+
+random.normalvariate(mu, sigma)  Normal distribution
+random.gauss(mu, sigma)          Gaussian distribution
+random.expovariate(lambd)        Exponential distribution
+
+================================================================================
+3. TIME LIBRARY
+================================================================================
+
+import time
+
+FUNCTIONS
+time.time()               Current timestamp (seconds since 1970)
+time.sleep(seconds)       Pause execution
+time.localtime()          Local time struct
+time.gmtime()             UTC time struct
+time.mktime(t)            Convert time struct to timestamp
+time.strftime(fmt, t)     Format time to string
+time.strptime(str, fmt)   Parse string to time struct
+time.ctime()              Current time as string
+time.monotonic()          Monotonic clock (can't go backward)
+time.perf_counter()       High-resolution timer
+time.process_time()       CPU time
+
+LOCALTIME ATTRIBUTES
+tm_year        Year (e.g., 2024)
+tm_mon         Month [1, 12]
+tm_mday        Day of month [1, 31]
+tm_hour        Hour [0, 23]
+tm_min         Minute [0, 59]
+tm_sec         Second [0, 61]
+tm_wday        Weekday [0, 6] (Monday is 0)
+tm_yday        Day of year [1, 366]
+tm_isdst       DST flag (0, 1, or -1)
+
+STRFTIME DIRECTIVES
+%A             Full weekday name (Monday)
+%a             Abbreviated weekday name (Mon)
+%B             Full month name (January)
+%b             Abbreviated month name (Jan)
+%d             Day of month [01, 31]
+%H             Hour 24-hour [00, 23]
+%I             Hour 12-hour [01, 12]
+%M             Minute [00, 59]
+%S             Second [00, 59]
+%Y             Year (2024)
+%y             Year without century [00, 99]
+%m             Month [01, 12]
+%p             AM/PM
+%j             Day of year [001, 366]
+%W             Week number [00, 53]
+%Z             Timezone name
+%Y-%m-%d       Example: 2024-01-15
+%H:%M:%S       Example: 14:30:45
+
+================================================================================
+4. TKINTER LIBRARY
+================================================================================
+
+import tkinter
+
+MAIN WINDOW
+window = tkinter.Tk()
+window = tkinter.Toplevel()
+
+WINDOW METHODS
+window.title("Title")                    Set title
+window.geometry("WxH+X+Y")              Set size/position
+window.configure(bg="white")             Set background
+window.resizable(True, True)             Allow resize
+window.attributes("-topmost", True)      Always on top
+window.focus_force()                     Force focus
+window.update()                          Update display
+window.update_idletasks()                Update pending tasks
+window.after(ms, func)                   Schedule function call
+window.after_cancel(id)                  Cancel scheduled call
+window.destroy()                         Close window
+window.quit()                            Quit application
+window.bind(event, callback)             Bind event
+window.unbind(event)                     Unbind event
+
+WIDGETS
+tkinter.Label(window, text, font, fg, bg)
+tkinter.Button(window, text, command, font, bg, fg)
+tkinter.Entry(window, width, font, show)
+tkinter.Canvas(window, width, height, bg)
+tkinter.Radiobutton(window, text, variable, value, command)
+tkinter.Checkbutton(window, text, variable, command)
+tkinter.Frame(window)
+tkinter.Text(window, width, height)
+tkinter.Listbox(window)
+tkinter.Scale(window, from_, to)
+tkinter.Message(window, text)
+tkinter.Toplevel(window)
+
+PLACEMENT
+widget.place(x, y)                       Position by coordinates
+widget.place(x, y, width=w, height=h)   Position with size
+widget.pack()                            Auto-position
+widget.pack(side="left")                 Position with side
+widget.grid(row, col)                    Position in grid
+widget.grid(row, col, rowspan, columnspan)
+
+LABEL METHODS
+label.configure(text="new")              Update text
+label.configure(fg="red")               Update color
+label.configure(font=("Arial", 16))     Update font
+label.cget("text")                      Get current text
+
+BUTTON METHODS
+button.configure(command=new_func)       Update command
+
+ENTRY METHODS
+entry.get()                              Get text
+entry.delete(0, tkinter.END)            Clear
+entry.delete(0, 5)                      Delete range
+entry.insert(0, "text")                 Insert at position
+entry.select_range(0, tkinter.END)     Select all
+entry.icursor(tkinter.END)              Move cursor to end
+
+CANVAS METHODS
+canvas.pack()                            Display canvas
+canvas.delete("all")                     Clear all
+canvas.delete(item_id)                   Delete specific item
+canvas.move(id, dx, dy)                 Move item
+canvas.coords(id, x1, y1, x2, y2)      Set coordinates
+canvas.itemconfig(id, fill="red")       Change item properties
+canvas.find_all()                        Get all item IDs
+canvas.create_rectangle(x1, y1, x2, y2, fill, outline, width)
+canvas.create_oval(x1, y1, x2, y2, fill, outline, width)
+canvas.create_line(x1, y1, x2, y2, fill, width)
+canvas.create_text(x, y, text, font, fill)
+canvas.create_polygon(x1, y1, x2, y2, ..., fill)
+canvas.create_arc(x1, y1, x2, y2, start, extent)
+canvas.create_image(x, y, image)
+
+RADIOBUTTON / CHECKBUTTON
+variable = tkinter.StringVar()
+variable = tkinter.IntVar()
+variable.get()                           Get value
+variable.set("value")                    Set value
+
+EVENT OBJECT PROPERTIES
+event.x             Mouse x position
+event.y             Mouse y position
+event.keysym        Key name
+event.keycode       Key code
+event.char          Character pressed
+event.num           Mouse button number
+
+EVENT BINDINGS
+"<Button-1>"        Left mouse click
+"<Button-2>"        Middle mouse click
+"<Button-3>"        Right mouse click
+"<Motion>"          Mouse movement
+"<Key>"             Any key press
+"<KeyPress>"        Key press
+"<KeyRelease>"      Key release
+"<Return>"          Enter key
+"<Escape>"          Escape key
+"<Space>"           Space bar
+"<BackSpace>"       Backspace
+"<Delete>"          Delete key
+"<Up>"              Arrow up
+"<Down>"            Arrow down
+"<Left>"            Arrow left
+"<Right>"           Arrow right
+"<a>"               Letter a
+"<A>"               Capital A
+"<F1>"              Function key 1
+
+================================================================================
+5. SYS LIBRARY
+================================================================================
+
+import sys
+
+FUNCTIONS
+sys.exit()              Exit program
+sys.exit(0)             Exit with success code
+sys.exit(1)             Exit with error code
+sys.argv                Command line arguments
+sys.stdin               Standard input
+sys.stdout              Standard output
+sys.stderr              Standard error
+sys.path                Module search path
+sys.version             Python version string
+sys.getrecursionlimit() Get recursion limit
+sys.setrecursionlimit() Set recursion limit
+
+================================================================================
+6. OS LIBRARY
+================================================================================
+
+import os
+
+FUNCTIONS
+os.getcwd()             Current working directory
+os.chdir(path)          Change directory
+os.listdir(path)        List directory contents
+os.mkdir(name)          Create directory
+os.makedirs(path)       Create nested directories
+os.remove(file)         Delete file
+os.rename(old, new)     Rename file
+os.path.exists(path)    Check if path exists
+os.path.isfile(path)    Check if file
+os.path.isdir(path)     Check if directory
+os.path.join(a, b)      Join path components
+os.path.basename(path)  Get filename
+os.path.dirname(path)   Get directory
+os.path.splitext(file)  Split extension
+os.system(cmd)          Run system command
+os.environ              Environment variables
+
+================================================================================

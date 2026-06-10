@@ -1,0 +1,180 @@
+================================================================================
+                    PYTHON DATA STRUCTURES
+================================================================================
+
+================================================================================
+LISTS
+================================================================================
+
+CREATION
+my_list = [1, 2, 3, 4, 5]
+empty_list = []
+mixed = [1, "hello", 3.14, True]
+from_list = list(iterable)
+
+INDEXING
+my_list[0]              First element
+my_list[-1]             Last element
+my_list[i]              Element at index i
+
+SLICING
+my_list[1:3]            Elements at index 1, 2
+my_list[:3]             First 3 elements
+my_list[2:]             From index 2 to end
+my_list[::2]            Every other element
+my_list[::-1]           Reversed list
+my_list[start:stop:step]
+
+OPERATIONS
+len(my_list)            Length
+3 in my_list            Membership check
+[1,2] + [3,4]          Concatenation -> [1,2,3,4]
+[0] * 5                Repetition -> [0,0,0,0,0]
+
+METHODS
+.append(item)           Add to end
+.insert(i, item)        Insert at index
+.extend(iterable)       Add multiple items
+.remove(item)           Remove first occurrence
+.pop()                  Remove and return last
+.pop(i)                 Remove and return at index
+.clear()                Remove all elements
+.index(item)            Find index of value
+.count(item)            Count occurrences
+.sort()                 Sort in place
+.sort(reverse=True)     Sort descending
+.sort(key=func)         Sort with key function
+.reverse()              Reverse in place
+.copy()                 Shallow copy
+
+LIST COMPREHENSION
+[expression for item in iterable]
+[expression for item in iterable if condition]
+[expression for item in iterable for sub in item]
+
+EXAMPLES
+squares = [x**2 for x in range(10)]
+evens = [x for x in range(20) if x % 2 == 0]
+flat = [x for sub in nested for x in sub]
+
+================================================================================
+TUPLES
+================================================================================
+
+CREATION
+my_tuple = (1, 2, 3)
+single = (1,)           Note: comma required for single element
+empty = ()
+from_list = tuple(list)
+
+INDEXING
+my_tuple[0]             First element
+my_tuple[-1]            Last element
+
+SLICING
+my_tuple[1:3]           Elements at index 1, 2
+
+METHODS
+.count(item)            Count occurrences
+.index(item)            Find index of value
+
+TUPLES ARE IMMUTABLE - cannot add, remove, or change elements
+
+================================================================================
+DICTIONARIES
+================================================================================
+
+CREATION
+my_dict = {"key": "value", "key2": "value2"}
+empty_dict = {}
+from_pairs = dict([("a", 1), ("b", 2)])
+from_keys = dict.fromkeys(["a", "b"], 0)
+
+ACCESS
+my_dict["key"]          Get value (error if missing)
+my_dict.get("key")      Get value (None if missing)
+my_dict.get("key", 0)   Get value with default
+
+MODIFY
+my_dict["key"] = value  Set or add
+my_dict.update({"a": 1, "b": 2})  Merge
+my_dict.setdefault("key", default) Set if missing
+
+DELETE
+del my_dict["key"]      Delete key
+my_dict.pop("key")      Remove and return
+my_dict.popitem()       Remove last item
+my_dict.clear()         Remove all
+
+ITERATION
+for key in my_dict:
+for key, value in my_dict.items():
+for key in my_dict.keys():
+for value in my_dict.values():
+
+METHODS
+.keys()                 All keys (view)
+.values()               All values (view)
+.items()                All (key, value) pairs (view)
+.copy()                 Shallow copy
+.update(dict)           Merge/update
+
+DICTIONARY COMPREHENSION
+{squared: x for x in range(6)}
+{x: x**2 for x in range(6)}
+{x: x**2 for x in range(6) if x % 2 == 0}
+
+================================================================================
+SETS
+================================================================================
+
+CREATION
+my_set = {1, 2, 3}
+empty_set = set()       Note: {} creates empty dict
+from_list = set([1, 2, 2, 3])  -> {1, 2, 3}
+
+OPERATIONS
+3 in my_set             Membership check
+len(my_set)             Length
+
+METHODS
+.add(item)              Add element
+.remove(item)           Remove element (error if missing)
+.discard(item)          Remove element (no error)
+.pop()                  Remove and return arbitrary element
+.clear()                Remove all elements
+.union(set2)            All elements from both
+.intersection(set2)     Common elements
+.difference(set2)       Elements in first but not second
+.symmetric_difference(set2) Elements in either but not both
+.issubset(set2)         Check if subset
+.issuperset(set2)       Check if superset
+.isdisjoint(set2)       Check if no common elements
+.copy()                 Shallow copy
+
+SET COMPREHENSION
+{x for x in range(10)}
+{x for x in range(10) if x % 2 == 0}
+
+================================================================================
+STRINGS (as sequences)
+================================================================================
+
+INDEXING
+s[0]                    First character
+s[-1]                   Last character
+
+SLICING
+s[1:4]                  Characters 1, 2, 3
+s[:4]                   First 4 characters
+s[1:]                   From index 1 to end
+s[::2]                  Every other character
+s[::-1]                 Reversed string
+
+IMMUTABLE - cannot modify characters in place
+
+ITERATION
+for char in s:
+    print(char)
+
+================================================================================

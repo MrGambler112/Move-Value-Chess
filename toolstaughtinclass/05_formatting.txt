@@ -1,0 +1,128 @@
+================================================================================
+                    PYTHON FORMATTING
+================================================================================
+
+================================================================================
+F-STRINGS (Recommended)
+================================================================================
+
+f"text {value}"
+f"text {value:format}"
+f"text {value:>10}"
+f"text {value:<10}"
+f"text {value:^10}"
+f"text {value:format}"
+
+FORMAT TYPES
+{value:d}               Integer
+{value:b}               Binary
+{value:o}               Octal
+{value:x}               Hexadecimal (lower)
+{value:X}               Hexadecimal (upper)
+{value:e}               Scientific notation
+{value:E}               Scientific notation (upper)
+{value:f}               Fixed-point float
+{value:F}               Fixed-point float (upper)
+{value:g}               General format
+{value:G}               General format (upper)
+{value:%}               Percentage
+{value:c}               Character
+{value:s}               String
+{value:r}               Raw string
+
+WIDTH AND ALIGNMENT
+{value:>10}             Right justify in 10 spaces
+{value:<10}             Left justify in 10 spaces
+{value:^10}             Center in 10 spaces
+{value:>10.2f}          Right justify, 2 decimals
+{value:<10s}            Left justify string
+
+FILL CHARACTER
+{value:*>10}            Fill with *
+{value:0>10}            Fill with 0
+{value:#<15}            Fill with #
+
+EXAMPLES
+f"{123:d}"              "123"
+f"{123:05d}"            "00123"
+f"{3.14159:.2f}"        "3.14"
+f"{1000000:,}"          "1,000,000"
+f"{0.256:.1%}"          "25.6%"
+f"{1000000:e}"          "1.000000e+06"
+f"{'hello':>20}"        "               hello"
+f"{'hello':^20}"        "       hello       "
+f"{123:#010x}"          "0x0000007b"
+
+================================================================================
+OLD STYLE FORMAT SPECIFIERS (%)
+================================================================================
+
+"format string" % value
+"format string" % (val1, val2)
+
+SPECIFIERS
+%d              Integer
+%i              Integer
+%u              Unsigned integer
+%f              Float
+%e              Scientific notation
+%E              Scientific notation (upper)
+%g              General format
+%G              General format (upper)
+%s              String
+%c              Character
+%o              Octal
+%x              Hexadecimal (lower)
+%X              Hexadecimal (upper)
+%%              Literal %
+
+WIDTH AND PRECISION
+%10d            Integer in 10 spaces
+%-10d           Left justified
+%010d           Zero-padded
+%10.2f          Float in 10 spaces, 2 decimals
+%.2f           Float with 2 decimals
+%20s            String in 20 spaces
+%-20s           Left justified string
+
+EXAMPLES
+"Number: %5d" % 42            "Number:    42"
+"Pi: %.2f" % 3.14159          "Pi: 3.14"
+"Name: %-10s" % "Alice"       "Name: Alice     "
+"Zero: %05d" % 42             "Zero: 00042"
+
+================================================================================
+STRING FORMAT METHOD
+================================================================================
+
+"text {}".format(value)
+"text {:format}".format(value)
+"text {0}".format(val0)
+"text {name}".format(name="value")
+
+EXAMPLES
+"Number: {:5d}".format(42)           "Number:    42"
+"Pi: {:.2f}".format(3.14159)        "Pi: 3.14"
+"Name: {:>10}".format("Alice")       "Name:      Alice"
+"{0} and {1}".format("A", "B")      "A and B"
+"{a} = {b}".format(a=1, b=2)        "1 = 2"
+
+================================================================================
+ESCAPE CHARACTERS
+================================================================================
+
+\n              New line
+\t              Tab
+\\              Backslash
+\'              Single quote
+\"              Double quote
+\0              Null character
+\r              Carriage return
+\b              Backspace
+\f              Form feed
+\uxxxx          Unicode (16-bit)
+\Uxxxxxxxx      Unicode (32-bit)
+\ooo            Octal value
+\xhh            Hex value
+
+================================================================================

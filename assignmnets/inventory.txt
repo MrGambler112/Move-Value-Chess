@@ -1,0 +1,8 @@
+sleeping_bag S2 15 15
+A premium quality sleeping bag for winter camping.
+pan P1 4 25
+A lightweight camping pan for outdoor cooking.
+tent T2 3 5
+A waterproof 3-season tent for two people.
+plaid_tent TP 1 5
+A classic plaid tent for backyard camping.

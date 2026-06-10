@@ -1,0 +1,132 @@
+================================================================================
+                    PYTHON FUNCTIONS BUILT-IN
+================================================================================
+
+OUTPUT / INPUT
+print()              - Output to console
+input()              - Get user input (returns string)
+
+DATA CONVERSION
+int()                - Convert to integer
+float()              - Convert to float
+str()                - Convert to string
+bool()               - Convert to boolean
+type()               - Check data type
+
+MATH
+abs()                - Absolute value
+min()                - Minimum value
+max()                - Maximum value
+sum()                - Sum of iterable
+round()              - Round number
+pow()                - Power (same as **)
+divmod()             - Returns (quotient, remainder)
+
+SEQUENCES / COLLECTIONS
+len()                - Length of string/list
+range()              - Generate number sequence
+sorted()             - Return sorted list
+reversed()           - Return reversed iterator
+enumerate()          - Returns (index, value) pairs
+zip()                - Combine iterables
+map()                - Apply function to iterable
+filter()             - Filter iterable by condition
+any()                - True if any element is true
+all()                - True if all elements are true
+
+STRING METHODS
+.upper()             - "hello" -> "HELLO"
+.lower()             - "HELLO" -> "hello"
+.strip()             - Remove whitespace
+.lstrip()            - Remove leading whitespace
+.rstrip()            - Remove trailing whitespace
+.split()             - Split string to list
+.split(",")          - Split by comma
+.join(list)          - List to string
+.replace("a","b")    - Replace substring
+.find("sub")         - Find index (-1 if not found)
+.rfind("sub")        - Find from right
+.count("sub")        - Count occurrences
+.startswith("pre")   - Check start
+.endswith("suf")     - Check end
+.isdigit()           - Check if digits
+.isalpha()           - Check if letters
+.isalnum()           - Check if alphanumeric
+.isspace()           - Check if whitespace
+.isupper()           - Check if uppercase
+.islower()           - Check if lowercase
+.istitle()           - Check if title case
+.title()             - Capitalize each word
+.capitalize()        - Capitalize first letter
+.center(width)       - Center in width
+.ljust(width)        - Left justify
+.rjust(width)        - Right justify
+.zfill(width)        - Pad with zeros
+.encode()            - Encode string
+.format()            - Format string
+index("sub")         - Find index (error if not found)
+
+LIST METHODS
+.append(item)        - Add to end
+.insert(i, item)     - Insert at index
+.remove(item)        - Remove first occurrence
+.pop()               - Remove and return last
+.pop(i)              - Remove and return at index
+.clear()             - Remove all elements
+.copy()              - Shallow copy
+.extend(list)        - Add multiple items
+.sort()              - Sort in place
+.sort(reverse=True)  - Sort descending
+.reverse()           - Reverse in place
+.index(item)         - Find index of value
+.count(item)         - Count occurrences
+
+TUPLE METHODS
+.count(item)         - Count occurrences
+.index(item)         - Find index
+
+DICTIONARY METHODS
+.get(key)            - Get value (None if missing)
+.get(key, default)   - Get value with default
+.keys()              - All keys
+.values()            - All values
+.items()             - All (key, value) pairs
+.update(dict)        - Merge/update
+.pop(key)            - Remove and return
+.popitem()           - Remove last item
+.clear()             - Remove all
+.copy()              - Shallow copy
+.setdefault(k, v)    - Set if key missing
+
+FILE METHODS
+.read()              - Read entire file
+.readline()          - Read one line
+.readlines()         - Read all lines to list
+.write(text)         - Write text
+.writelines(list)    - Write list of strings
+.close()             - Close file
+.tell()              - Current position
+.seek(pos)           - Move to position
+
+TYPE CHECKING
+isinstance(obj, type) - Check if object is of type
+callable(obj)         - Check if object is callable
+
+OBJECT / VARIABLE
+id()                 - Object identity (memory address)
+hash()               - Hash value
+repr()               - String representation
+vars()               - Object attributes
+dir()                - List attributes/methods
+
+ITERATION
+next(iterator)       - Next item from iterator
+iter(iterable)        - Get iterator
+
+INPUT VALIDATION
+.isidentifier()      - Check if valid variable name
+
+FORMAT
+format(value, fmt)   - Format value
+f"{value:format}"    - F-string formatting
+"{:format}".format() - .format() method

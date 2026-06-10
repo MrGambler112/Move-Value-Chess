@@ -1,0 +1,154 @@
+================================================================================
+                    PYTHON KEYWORDS AND SYNTAX
+================================================================================
+
+CONDITIONAL
+if condition:
+    code
+elif condition:
+    code
+else:
+    code
+
+LOOP - FOR
+for variable in range(n):
+for variable in range(start, end):
+for variable in range(start, end, step):
+for item in list:
+for char in string:
+for key, value in dict.items():
+
+LOOP - WHILE
+while condition:
+    code
+
+LOOP CONTROL
+break                - Exit loop immediately
+continue             - Skip to next iteration
+else (with loop)     - Runs if loop completes normally
+
+FUNCTION
+def function_name():
+def function_name(param):
+def function_name(p1, p2, p3="default"):
+    return value
+
+VARIABLES
+variable = value
+variable += 1        # Same as variable = variable + 1
+variable -= 1
+variable *= 2
+variable /= 2
+variable //= 2
+variable %= 2
+variable **= 2
+
+CONSTANTS (naming convention)
+CONSTANT_NAME = value
+
+DEL
+del variable
+del list[i]
+del dict[key]
+
+SCOPE
+global variable      # Declare global variable
+nonlocal variable    # Declare enclosing scope variable
+
+IMPORT
+import module
+import module as alias
+from module import function
+from module import *
+from package.module import function
+
+EXCEPTION HANDLING
+try:
+    code
+except ExceptionType as e:
+    handle error
+except:
+    handle any error
+else:
+    code if no error
+finally:
+    always runs
+
+raise ExceptionType("message")
+
+CLASS
+class ClassName:
+class ClassName(ParentClass):
+    def __init__(self):
+    def method(self):
+
+LAMBDA
+lambda x: x + 1
+lambda x, y: x + y
+
+LIST COMPREHENSION
+[expression for item in iterable]
+[expression for item in iterable if condition]
+[expression for item in iterable for sub in item]
+
+DICTIONARY COMPREHENSION
+{key: value for item in iterable}
+{key: value for item in iterable if condition}
+
+SET COMPREHENSION
+{expression for item in iterable}
+
+GENERATOR
+(expression for item in iterable)
+yield value
+
+BOOLEAN LITERALS
+True
+False
+
+NONE
+None
+
+COMPARISON
+==       Equal to
+!=       Not equal to
+>        Greater than
+<        Less than
+>=       Greater or equal
+<=       Less or equal
+
+LOGICAL
+and      Both true
+or       At least one true
+not      Negate
+
+IDENTITY
+is       Same object
+is not   Different object
+
+MEMBERSHIP
+in       Element in sequence
+not in   Element not in sequence
+
+ARITHMETIC
++        Addition
+-        Subtraction
+*        Multiplication
+/        Division (float)
+//       Integer division (floor)
+%        Modulo (remainder)
+**       Exponentiation
+
+BITWISE
+&        AND
+|        OR
+^        XOR
+~        NOT
+<<       Left shift
+>>       Right shift
+
+STRING OPERATORS
++        Concatenation
+*        Repetition
+in       Membership
+not in   Non-membership
