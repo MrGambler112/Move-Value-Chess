@@ -576,6 +576,34 @@ def make_real_move(start_row, start_col, end_row, end_col, moving_color) :
     record_move (start_row, start_col, end_row, end_col, piece, captured)
 
 
+#make the AI pause for a few seconds before choosing a move
+def wait_for_ai_think_time() :
+
+    global ai_time, last_time
+
+    #pick a simple random wait so the AI does not move instantly every turn
+    think_seconds = random.randrange(4, 8)
+    status_label.configure (text = "AI is thinking...")
+    window.update_idletasks ()
+    time.sleep (think_seconds)
+
+    #subtract the time the AI spent "thinking" from the AI clock
+    ai_time = ai_time - think_seconds
+
+    if ai_time < 0 :
+        ai_time = 0
+
+    #reset the timer base so the scheduled timer update does not subtract it again
+    last_time = time.time ()
+    refresh_display ()
+
+    if ai_time == 0 :
+        handle_timeout ()
+        return False
+
+    return True
+
+
 #let the AI choose and play one move
 def do_ai_turn() :
 
@@ -585,6 +613,10 @@ def do_ai_turn() :
         return
 
     if timer_running == False :
+        return
+
+    #let the AI wait a random number of seconds before moving
+    if wait_for_ai_think_time() == False :
         return
 
     #at a random point in the game, one AI pawn is promoted

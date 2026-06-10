@@ -264,35 +264,67 @@ def build_moves_line() :
 
         #add commas between each move for the save file
         while index < len(move_strings) :
-            moves_line = moves_line + "," + move_strings[index]
+            moves_line = moves_line + ", " + move_strings[index]
             index = index + 1
 
     return moves_line
 
 
-def save_match_to_file(player_time_left, ai_time_left) :
+def get_result_text() :
+
+    #turn the saved result code into clearer file text
+    if game_result == "win" :
+        return "Player Win"
+    elif game_result == "lose" :
+        return "AI Win"
+    elif game_result == "draw" :
+        return "Draw"
+    else :
+        return "Unknown"
+
+
+def format_time_left(seconds_left) :
+
+    #show saved time in the same mm:ss style that the GUI uses
+    minutes = seconds_left // 60
+    seconds = seconds_left % 60
+
+    if minutes < 10 :
+        minute_text = "0" + str(minutes)
+    else :
+        minute_text = str(minutes)
+
+    if seconds < 10 :
+        second_text = "0" + str(seconds)
+    else :
+        second_text = str(seconds)
+
+    return minute_text + ":" + second_text
+
+
+def build_match_block(player_time_left, ai_time_left) :
 
     date_time = time.strftime("%Y-%m-%d %H:%M")
     moves_line = build_moves_line()
 
-    #save the match result summary first
+    match_block = ""
+    match_block = match_block + "MATCH DATE: " + date_time + "\n"
+    match_block = match_block + "RESULT: " + get_result_text() + "\n"
+    match_block = match_block + "PLAYER SCORE: " + str(player_score) + "\n"
+    match_block = match_block + "AI SCORE: " + str(ai_score) + "\n"
+    match_block = match_block + "PLAYER TIME LEFT: " + format_time_left(player_time_left) + "\n"
+    match_block = match_block + "AI TIME LEFT: " + format_time_left(ai_time_left) + "\n"
+    match_block = match_block + "MOVES PLAYED: " + moves_line + "\n"
+    match_block = match_block + "\n"
+
+    return match_block
+
+
+def save_match_to_file(player_time_left, ai_time_left) :
+
+    #save the match using labeled lines so each value is easy to read
     history_file = open("chess_history.txt", "a")
-    history_file.write(
-        "MATCH "
-        + date_time
-        + " "
-        + game_result
-        + " "
-        + str(player_score)
-        + " "
-        + str(ai_score)
-        + " "
-        + str(player_time_left)
-        + " "
-        + str(ai_time_left)
-        + "\n"
-    )
-    history_file.write("MOVES " + moves_line + "\n")
+    history_file.write(build_match_block(player_time_left, ai_time_left))
     history_file.close()
 
     #after saving the match, update lifetime totals too
