@@ -1,6 +1,6 @@
 #Name: Board Logic
 #Programmer: Syed (Mahadi) Masuduzzaman
-#Date: June 10, 2026
+#Last Updated: June 10, 2026
 #Description: This file contains helper functions for board copying,
 #             attack checking, and full legal move generation.
 
@@ -44,7 +44,7 @@ def find_king(board, color) :
             if board[row][col] == king_code :
                 return [row, col]
 
-    return [-1, -1]
+    return [-1, -1] #king not found, should not happen in a normal game
 
 
 #attack checking
@@ -57,7 +57,7 @@ def is_square_attacked(board, row, col, by_color) :
         for check_col in range(8) :
             piece = board[check_row][check_col]
 
-            if piece != "" :
+            if piece != "" : #ignoring empty squares
                 if piece[0] == by_prefix :
                     if is_legal_move(check_row, check_col, row, col, board) == True :
                         return True
@@ -72,8 +72,8 @@ def is_in_check(board, color) :
     king_row = king_pos[0]
     king_col = king_pos[1]
 
-    if king_row == -1 :
-        return False
+    if king_row == -1 : #no king found, should not happen in a normal game
+        return False #prevent crash or buggy game
 
     opponent = get_opponent_color(color)
     return is_square_attacked(board, king_row, king_col, opponent)
@@ -87,9 +87,9 @@ def make_move_on_board(board, start_row, start_col, end_row, end_col) :
 
     #move the piece and empty the starting square
     board[end_row][end_col] = board[start_row][start_col]
-    board[start_row][start_col] = ""
+    board[start_row][start_col] = "" #replace with empty string to indicate no piece
 
-    return captured_piece
+    return captured_piece 
 
 
 def would_be_in_check(board, start_row, start_col, end_row, end_col, color) :
@@ -97,8 +97,9 @@ def would_be_in_check(board, start_row, start_col, end_row, end_col, color) :
     #test the move on a copied board so the real board is not changed
     test_board = copy_board(board)
     test_board[end_row][end_col] = test_board[start_row][start_col]
-    test_board[start_row][start_col] = ""
+    test_board[start_row][start_col] = "" 
 
+    #simulate move to see if move will leave king vulnerable
     return is_in_check(test_board, color)
 
 

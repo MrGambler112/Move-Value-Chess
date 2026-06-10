@@ -1,6 +1,6 @@
 #Name: Chess Data
 #Programmer: Syed (Mahadi) Masuduzzaman
-#Date: June 10, 2026
+#Last Updated: June 10, 2026
 #Description: This file stores the starting board, piece text, piece
 #             values, and position value tables used by the game.
 
@@ -38,12 +38,12 @@ PIECE_TEXT = {
 
 #piece point values
 PIECE_VALUES = {
-    "p": 1,
-    "n": 3,
-    "b": 3,
-    "r": 5,
-    "q": 9,
-    "k": 0,
+    "p": 1, #pawn
+    "n": 3, #knight
+    "b": 3, #bishop
+    "r": 5, #rook
+    "q": 9, #queen
+    "k": 0, #king
 }
 
 

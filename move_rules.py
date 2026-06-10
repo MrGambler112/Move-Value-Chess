@@ -1,6 +1,6 @@
 #Name: Move Rules
 #Programmer: Syed (Mahadi) Masuduzzaman
-#Date: June 10, 2026
+#Last Updated: June 10, 2026
 #Description: This file contains the movement rules for each chess
 #             piece and helper functions for move validation.
 
@@ -51,14 +51,14 @@ def pawn_move(start_row, start_col, end_row, end_col, board) :
 
             if start_row == 6 and end_row == 4 :
                 #white pawns may move two squares from their starting row
-                if board[5][start_col] == "" :
-                    if board[end_row][end_col] == "" :
+                if board[5][start_col] == "" : #check that nothing is on row 5
+                    if board[end_row][end_col] == "" : #check that nothing is on row 4 col 4
                         return True
 
-        if end_row == start_row - 1 :
+        if end_row == start_row - 1 : #capture 1 row up
             #white pawns capture diagonally
-            if end_col == start_col - 1 or end_col == start_col + 1 :
-                if board[end_row][end_col] != "" :
+            if end_col == start_col - 1 or end_col == start_col + 1 : #diagonal left or right
+                if board[end_row][end_col] != "" : #check that there is an enemy
                     return True
 
     return False
@@ -97,8 +97,8 @@ def rook_move(start_row, start_col, end_row, end_col, board) :
         return False
 
     #rooks must move in a straight line
-    if start_row != end_row and start_col != end_col :
-        return False
+    if start_row != end_row and start_col != end_col : 
+        return False #return false if not moving in a straight line
 
     if start_col == end_col :
         #check every square between the start and end row
@@ -109,11 +109,11 @@ def rook_move(start_row, start_col, end_row, end_col, board) :
 
         check_row = start_row + row_change
 
-        while check_row != end_row :
+        while check_row != end_row : #check each subsequent row for pieces
             if board[check_row][start_col] != "" :
-                return False
+                return False #prevent movement if there is a piece
 
-            check_row = check_row + row_change
+            check_row = check_row + row_change #continue adding until we reach the end row
 
         return True
 
@@ -126,11 +126,11 @@ def rook_move(start_row, start_col, end_row, end_col, board) :
 
         check_col = start_col + col_change
 
-        while check_col != end_col :
+        while check_col != end_col : #check each subsequent column for pieces
             if board[start_row][check_col] != "" :
-                return False
+                return False #prevent movement if there is a piece
 
-            check_col = check_col + col_change
+            check_col = check_col + col_change #continue adding until we reach the end column
 
         return True
 
@@ -143,6 +143,7 @@ def bishop_move(start_row, start_col, end_row, end_col, board) :
     if same_colour_piece(start_row, start_col, end_row, end_col, board) == True :
         return False
 
+    #later this difference will be used to mreasure the diagonal path and check for pieces
     row_difference = end_row - start_row
     col_difference = end_col - start_col
 
@@ -157,24 +158,26 @@ def bishop_move(start_row, start_col, end_row, end_col, board) :
     if diagonal_move == False :
         return False
 
-    if end_row > start_row :
+    if end_row > start_row : #determine row change direction
         row_change = 1
     else :
         row_change = -1
 
-    if end_col > start_col :
+    if end_col > start_col : #determine column change direction
         col_change = 1
     else :
         col_change = -1
 
+    #same methodology as rook
     check_row = start_row + row_change
     check_col = start_col + col_change
 
     #every square between start and end must be empty
     while check_row != end_row :
-        if board[check_row][check_col] != "" :
+        if board[check_row][check_col] != "" : #check that there is no piece on the way
             return False
 
+        #looping until reach the end row and col 
         check_row = check_row + row_change
         check_col = check_col + col_change
 
@@ -188,6 +191,7 @@ def knight_move(start_row, start_col, end_row, end_col, board) :
     if same_colour_piece(start_row, start_col, end_row, end_col, board) == True :
         return False
 
+    #knight can only go 2 row 1 col or 1 row 2 col in any direction
     row_difference = end_row - start_row
     col_difference = end_col - start_col
 
@@ -223,6 +227,7 @@ def king_move(start_row, start_col, end_row, end_col, board) :
     if same_colour_piece(start_row, start_col, end_row, end_col, board) == True :
         return False
 
+    #king can only go 1 row 1 col in any direction
     row_difference = end_row - start_row
     col_difference = end_col - start_col
 
@@ -251,13 +256,14 @@ def is_legal_move(start_row, start_col, end_row, end_col, board) :
 
     piece = board[start_row][start_col]
     if piece == "" :
-        return False
+        return False #there must be a piece to move
 
     #identify the type of piece and send it to the correct rule function
-    piece_type = piece[1]
+    piece_type = piece[1] #piece type
 
-    if piece_type == "p" :
-        if piece[0] == "w" :
+    #This whole section just delegates movements
+    if piece_type == "p" : # if its a pawn
+        if piece[0] == "w" : #white colour pawn
             return pawn_move(start_row, start_col, end_row, end_col, board)
         else :
             return black_pawn_move(start_row, start_col, end_row, end_col, board)
@@ -277,14 +283,14 @@ def is_legal_move(start_row, start_col, end_row, end_col, board) :
     elif piece_type == "k" :
         return king_move(start_row, start_col, end_row, end_col, board)
 
-    return False
+    return False #unknown piece type that is rejected
 
 
 def get_piece_value(piece) :
 
     #empty squares are worth zero points
     if piece == "" :
-        return 0
+        return 0 #no piece = no points
 
     piece_type = piece[1]
 
@@ -292,4 +298,4 @@ def get_piece_value(piece) :
     if piece_type in PIECE_VALUES :
         return PIECE_VALUES[piece_type]
 
-    return 0
+    return 0 #unknown piece type that is worth zero points

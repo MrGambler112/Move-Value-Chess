@@ -1,6 +1,6 @@
 #Name: Opening Book
 #Programmer: Syed (Mahadi) Masuduzzaman
-#Date: June 10, 2026
+#Last Updated: June 10, 2026
 #Description: This file stores a few opening patterns and returns a
 #             matching AI opening move when one is found.
 

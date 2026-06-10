@@ -1,6 +1,6 @@
 #Name: Game State
 #Programmer: Syed (Mahadi) Masuduzzaman
-#Date: June 10, 2026
+#Last Updated: June 10, 2026
 #Description: This file stores the changing match information such as
 #             captures, scores, move history, and saved match stats.
 

@@ -1,6 +1,6 @@
 #Name: AI Engine
 #Programmer: Syed (Mahadi) Masuduzzaman
-#Date: June 10, 2026
+#Last Updated: June 10, 2026
 #Description: This file calculates AI move values, checks simple
 #             opening moves, and chooses the best legal AI move.
 
@@ -19,7 +19,6 @@ from game_state import get_move_history_strings
 
 
 #move value multipliers
-#these multipliers now follow the written documentation more closely
 CAPTURE_VALUE_MULTIPLIER = 1
 POSITION_TABLE_MULTIPLIER = 0
 DEVELOPMENT_VALUE_MULTIPLIER = 1

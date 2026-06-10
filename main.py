@@ -1,6 +1,6 @@
 #Name: Move Value Based Chess Engine
 #Programmer: Syed (Mahadi) Masuduzzaman and Ryan Rawal
-#Date: June 10, 2026
+#Last Updated: June 10, 2026
 #Description: This program lets the user play chess against an AI
 #             that chooses the move with the best move value.
 
