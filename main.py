@@ -22,19 +22,19 @@ import random
 
 #window setup
 window = tkinter.Tk ()
-window.geometry ("900x700")
+window.geometry ("700x700")
 window.title ("Move Value Chess")
 window.resizable (False, False)
 window.configure (bg = "#302E2B")
 
-canvas = tkinter.Canvas (window, width = 900, height = 700, bg = "#302E2B")
+canvas = tkinter.Canvas (window, width = 700, height = 700, bg = "#302E2B")
 canvas.place (x = 0, y = 0)
 
 
 #board constants
-SQUARE_SIZE = 70
-BOARD_OFFSET_X = 45
-BOARD_OFFSET_Y = 65
+SQUARE_SIZE = 60
+BOARD_OFFSET_X = 110
+BOARD_OFFSET_Y = 90
 TIME_LIMIT = 600
 
 
@@ -252,13 +252,13 @@ def draw_board() :
     for row in range(8) :
         y_center = BOARD_OFFSET_Y + (row * SQUARE_SIZE) + (SQUARE_SIZE / 2)
         canvas.create_text (BOARD_OFFSET_X - 20, y_center, text = str(8 - row), fill = MUTED_TEXT, font = ("Arial", 10))
-        canvas.create_text (BOARD_OFFSET_X + 570, y_center, text = str(8 - row), fill = MUTED_TEXT, font = ("Arial", 10))
+        canvas.create_text (BOARD_OFFSET_X + (8 * SQUARE_SIZE) + 20, y_center, text = str(8 - row), fill = MUTED_TEXT, font = ("Arial", 10))
 
     #column letters are shown on the top and bottom of the board
     for col in range(8) :
         x_center = BOARD_OFFSET_X + (col * SQUARE_SIZE) + (SQUARE_SIZE / 2)
         canvas.create_text (x_center, BOARD_OFFSET_Y - 15, text = col_to_letter(col), fill = MUTED_TEXT, font = ("Arial", 10))
-        canvas.create_text (x_center, BOARD_OFFSET_Y + 575, text = col_to_letter(col), fill = MUTED_TEXT, font = ("Arial", 10))
+        canvas.create_text (x_center, BOARD_OFFSET_Y + (8 * SQUARE_SIZE) + 15, text = col_to_letter(col), fill = MUTED_TEXT, font = ("Arial", 10))
 
 
 #draw all the pieces from the current board position
@@ -342,8 +342,12 @@ def draw_everything() :
 
     canvas.delete ("all")
 
-    #draw the dark side panel background on the right
-    canvas.create_rectangle (630, 0, 900, 700, fill = PANEL_BG, outline = "")
+    #fill the full 700 by 700 background
+    canvas.create_rectangle (0, 0, 700, 700, fill = BACKGROUND, outline = "")
+
+    #draw a top info bar and a bottom control bar
+    canvas.create_rectangle (15, 10, 685, 70, fill = PANEL_BG, outline = "")
+    canvas.create_rectangle (15, 610, 685, 690, fill = PANEL_BG, outline = "")
 
     draw_board ()
     draw_pieces ()
@@ -445,15 +449,15 @@ def hide_setup_widgets() :
 
 def show_setup_widgets() :
 
-    #place all setup widgets in the side panel area
+    #setup widgets
     for widget in setup_widgets :
         widget.place (x = -500, y = -500)
 
-    title_label.place (x = 645, y = 25)
-    player_color_label.place (x = 645, y = 100)
-    target_label.place (x = 645, y = 165)
-    score_entry.place (x = 675, y = 190, width = 90)
-    start_button.place (x = 660, y = 240, width = 120)
+    title_label.place (x = 235, y = 180, width = 230)
+    player_color_label.place (x = 220, y = 255, width = 260)
+    target_label.place (x = 275, y = 315, width = 150)
+    score_entry.place (x = 305, y = 345, width = 90)
+    start_button.place (x = 275, y = 395, width = 150)
 
 
 def hide_game_widgets() :
@@ -464,21 +468,22 @@ def hide_game_widgets() :
 
 def show_game_widgets() :
 
-    #timers above and below the board
-    board_center_x = BOARD_OFFSET_X + (8 * SQUARE_SIZE // 2)
-    white_timer_label.place (x = board_center_x - 80, y = 655, width = 160)
-    black_timer_label.place (x = board_center_x - 80, y = 12, width = 160)
+    #timers stay inside the top bar
+    white_timer_label.place (x = 25, y = 24, width = 140)
+    black_timer_label.place (x = 535, y = 24, width = 140)
 
-    #side panel widgets during the game
-    turn_label.place (x = 645, y = 95, width = 160)
-    score_label.place (x = 645, y = 130, width = 200)
-    player_captured_label.place (x = 645, y = 170, width = 200)
-    ai_captured_label.place (x = 645, y = 195, width = 200)
-    info_label.place (x = 645, y = 230, width = 200)
-    status_label.place (x = 645, y = 300, width = 210)
-    move_entry.place (x = 645, y = 380, width = 100)
-    move_button.place (x = 755, y = 380, width = 50)
-    new_game_button.place (x = 665, y = 450, width = 110)
+    #top information row
+    score_label.place (x = 205, y = 18, width = 290)
+    turn_label.place (x = 280, y = 42, width = 140)
+
+    #bottom control row
+    player_captured_label.place (x = 25, y = 620, width = 180)
+    ai_captured_label.place (x = 25, y = 642, width = 180)
+    info_label.place (x = 225, y = 620, width = 250)
+    status_label.place (x = 225, y = 642, width = 250)
+    move_entry.place (x = 495, y = 620, width = 85)
+    move_button.place (x = 590, y = 618, width = 50)
+    new_game_button.place (x = 525, y = 648, width = 115)
 
 
 def hide_all_widgets() :
